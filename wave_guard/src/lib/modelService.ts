@@ -2,7 +2,10 @@ import {
   CyclonePredictionInput, 
   TsunamiPredictionInput, 
   PredictionResponse, 
-  ModelStatus 
+  ModelStatus,
+  EarthquakeDataRequest,
+  EarthquakeDataResponse,
+  TsunamiAnalysisResponse 
 } from '@/types/models';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_ML_API_URL || 'http://localhost:8000';
@@ -11,7 +14,7 @@ class ModelService {
   private async fetchAPI<T>(endpoint: string, options?: RequestInit): Promise<T> {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 15000); // Increased timeout for complex predictions
 
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         headers: {
@@ -55,6 +58,20 @@ class ModelService {
     return this.fetchAPI<PredictionResponse>('/predict/tsunami', {
       method: 'POST',
       body: JSON.stringify(input),
+    });
+  }
+
+  async getEarthquakeData(request: EarthquakeDataRequest): Promise<EarthquakeDataResponse> {
+    return this.fetchAPI<EarthquakeDataResponse>('/api/earthquake-data', {
+      method: 'POST',
+      body: JSON.stringify(request),
+    });
+  }
+
+  async analyzeTsunamiRisk(request: EarthquakeDataRequest): Promise<TsunamiAnalysisResponse> {
+    return this.fetchAPI<TsunamiAnalysisResponse>('/api/tsunami/analyze-location', {
+      method: 'POST',
+      body: JSON.stringify(request),
     });
   }
 
