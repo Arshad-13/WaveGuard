@@ -187,5 +187,67 @@ export interface UserRiskAssessment {
     time: string;
   };
   recommendations: string[];
+<<<<<<< HEAD
   lastUpdated: string;
 }
+=======
+  feed_info: {
+    feed_type: string;
+    source: string;
+    total_earthquakes_in_feed?: number;
+    last_updated: string;
+  };
+  timestamp: string;
+}
+
+export interface USGSEarthquakeResponse {
+  status: string;
+  count: number;
+  earthquakes: EarthquakeData[];
+  metadata: any;
+  feed_type: string;
+  message?: string;
+}
+
+// Cyclone prediction types
+export interface WeatherData {
+  pressure: number; // hPa
+  wind_speed: number; // m/s
+  wind_direction: number; // degrees
+  temperature: number; // Celsius
+  humidity: number; // percentage
+  visibility: number; // km
+}
+
+export interface CycloneRiskInput {
+  latitude: number;
+  longitude: number;
+  address?: string;
+}
+
+export interface CyclonePredictionResult {
+  prediction: boolean;
+  risk_level: 'No Risk' | 'Low Risk' | 'Moderate Risk' | 'High Risk' | 'Extreme Risk';
+  confidence: number;
+  predicted_wind_speed: number;
+  risk_factors: {
+    pressure_factor: string;
+    wind_factor: string;
+    combined_assessment: string;
+  };
+}
+
+export interface CycloneAssessment {
+  location: {
+    latitude: number;
+    longitude: number;
+    address?: string;
+  };
+  weather_data: WeatherData;
+  cyclone_prediction: CyclonePredictionResult;
+  recommendations: string[];
+  monitoring_advice: string[];
+  data_source: string;
+  timestamp: string;
+}
+>>>>>>> 47f91f7ecff7500b670830d8a9da9d7c1dfe689c
