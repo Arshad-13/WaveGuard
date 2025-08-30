@@ -78,7 +78,7 @@ const statsCards = [
 
 export function MetricsSection() {
   return (
-    <div className="h-full space-y-6">
+    <div className="w-full space-y-6">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {statsCards.map((card, index) => {
@@ -88,26 +88,26 @@ export function MetricsSection() {
           return (
             <div
               key={index}
-              className="bg-white/70 dark:bg-dark-2/70 backdrop-blur-sm rounded-xl border border-gray-200/50 dark:border-dark-3/50 p-4"
+              className="bg-white/90 backdrop-blur-sm rounded-xl border border-gray-200/50 p-4 shadow-lg"
             >
               <div className="flex items-center justify-between mb-2">
-                <div className={`p-2 rounded-lg bg-${card.color}-100 dark:bg-${card.color}-900/30`}>
-                  <Icon className={`w-5 h-5 text-${card.color}-600 dark:text-${card.color}-400`} />
+                <div className={`p-2 rounded-lg bg-${card.color}-100`}>
+                  <Icon className={`w-5 h-5 text-${card.color}-600`} />
                 </div>
                 <div className={`flex items-center text-sm ${
                   card.changeType === 'increase' 
-                    ? 'text-green-600 dark:text-green-400' 
-                    : 'text-red-600 dark:text-red-400'
+                    ? 'text-green-600' 
+                    : 'text-red-600'
                 }`}>
                   <TrendIcon className="w-3 h-3 mr-1" />
                   {card.change}
                 </div>
               </div>
               <div>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                <p className="text-2xl font-bold text-gray-900">
                   {card.value}
                 </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-gray-500">
                   {card.title}
                 </p>
               </div>
@@ -119,19 +119,19 @@ export function MetricsSection() {
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1">
         {/* Threat Trends Chart */}
-        <div className="lg:col-span-2 bg-white/70 dark:bg-dark-2/70 backdrop-blur-sm rounded-xl border border-gray-200/50 dark:border-dark-3/50 p-6">
+        <div className="lg:col-span-2 bg-white/90 backdrop-blur-sm rounded-xl border border-gray-200/50 p-6 shadow-lg">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h3 className="text-lg font-semibold text-gray-900">
               Threat Detection Trends
             </h3>
             <div className="flex items-center space-x-4 text-sm">
               <div className="flex items-center">
                 <div className="w-3 h-3 bg-blue-500 rounded mr-2" />
-                <span className="text-gray-600 dark:text-gray-300">Tsunami</span>
+                <span className="text-gray-600">Tsunami</span>
               </div>
               <div className="flex items-center">
                 <div className="w-3 h-3 bg-purple-500 rounded mr-2" />
-                <span className="text-gray-600 dark:text-gray-300">Cyclone</span>
+                <span className="text-gray-600">Cyclone</span>
               </div>
             </div>
           </div>
@@ -156,8 +156,8 @@ export function MetricsSection() {
         </div>
 
         {/* Threat Distribution */}
-        <div className="bg-white/70 dark:bg-dark-2/70 backdrop-blur-sm rounded-xl border border-gray-200/50 dark:border-dark-3/50 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+        <div className="bg-white/90 backdrop-blur-sm rounded-xl border border-gray-200/50 p-6 shadow-lg">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
             Threat Distribution
           </h3>
           <div className="h-48">
@@ -194,9 +194,9 @@ export function MetricsSection() {
                     className="w-3 h-3 rounded mr-2" 
                     style={{ backgroundColor: item.color }}
                   />
-                  <span className="text-gray-600 dark:text-gray-300">{item.name}</span>
+                  <span className="text-gray-600">{item.name}</span>
                 </div>
-                <span className="font-medium text-gray-900 dark:text-white">
+                <span className="font-medium text-gray-900">
                   {item.value}%
                 </span>
               </div>
@@ -205,8 +205,8 @@ export function MetricsSection() {
         </div>
 
         {/* Alert Timeline */}
-        <div className="lg:col-span-3 bg-white/70 dark:bg-dark-2/70 backdrop-blur-sm rounded-xl border border-gray-200/50 dark:border-dark-3/50 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+        <div className="lg:col-span-3 bg-white/90 backdrop-blur-sm rounded-xl border border-gray-200/50 p-6 shadow-lg">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
             24-Hour Alert Activity
           </h3>
           <div className="h-32">
