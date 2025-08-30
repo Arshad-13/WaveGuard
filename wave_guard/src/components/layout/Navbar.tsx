@@ -9,7 +9,7 @@ import { clsx } from 'clsx';
 const navigation = [
   { name: 'Chatbot', href: '/chatbot', icon: Shield },
   { name: 'Report', href: '/report', icon: AlertTriangle },
-  { name: 'Alerts', href: '/alert', icon: Shield },
+  { name: 'Alerts', href: '/alerts', icon: Shield },
   { name: 'Dashboard', href: '/dashboard', icon: Shield },
 ];
 

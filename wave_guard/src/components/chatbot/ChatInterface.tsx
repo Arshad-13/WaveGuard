@@ -3,6 +3,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, Waves, AlertCircle, Info, Zap } from 'lucide-react';
 import { clsx } from 'clsx';
+import {
+  saveMessageToFirestore,
+  getMessagesFromFirestore,
+} from "@/lib/chatbot-utils";
+import { chatWithGemini } from "@/lib/chatbot";
+import { marked } from "marked";
 
 interface Message {
   id: string;
@@ -12,24 +18,47 @@ interface Message {
   suggestions?: string[];
 }
 
-// Initial welcome message - can be customized or removed once ML model is integrated
+// Welcome message for new chat sessions
 const welcomeMessage: Message = {
   id: 'welcome',
   type: 'assistant',
-  content: 'Hello! I\'m your AI Coastal Assistant. I\'m currently being integrated with advanced ML models to provide you with:\n\n• Real-time coastal threat analysis\n• Intelligent threat detection\n• Emergency response guidance\n• Incident reporting assistance\n\nHow can I help you today?',
+  content: '🌊 Welcome to WaveGuard! I\'m your AI assistant for coastal safety and marine intelligence. I can help you with:\n\n• **Coastal threat assessment** and risk analysis\n• **Emergency preparedness** and evacuation procedures\n• **Marine weather conditions** and safety alerts\n• **Incident reporting** and response protocols\n• **Safety recommendations** for coastal activities\n\nHow can I assist you today?',
   timestamp: new Date(),
+  suggestions: [
+    'What are the current coastal threats in my area?',
+    'How should I prepare for coastal emergencies?',
+    'I need to report a coastal incident'
+  ]
 };
 
-// Placeholder function for ML model integration
-const callMLModel = async (userInput: string): Promise<string> => {
-  // TODO: Replace this with actual ML model API call
-  // This is where you would integrate your tsunami/cyclone detection models
-  
-  // Simulate API call delay
-  await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 1000));
-  
-  // Placeholder response - replace with actual ML model response
-  return `I understand you're asking: "${userInput}". I'm currently being integrated with ML models to provide intelligent coastal threat analysis. Please connect your trained models to this interface for full functionality.`;
+// ML Model API call function
+const callMLModel = async (input: string): Promise<string> => {
+  try {
+    // Use the existing chatWithGemini function
+    const response = await chatWithGemini([input]);
+    return response;
+  } catch (error) {
+    console.error('Error calling ML model:', error);
+    throw new Error('Unable to process your request at this time. Please try again.');
+  }
+};
+
+interface Message {
+  id: string;
+  type: 'user' | 'assistant';
+  content: string;
+  timestamp: Date;
+  suggestions?: string[];
+}
+
+// Convert Firebase message format to ChatInterface format
+const convertFirebaseMessage = (msg: any): Message => {
+  return {
+    id: msg.id || Date.now().toString(),
+    type: msg.role === 'user' ? 'user' : 'assistant',
+    content: msg.content,
+    timestamp: msg.timestamp?.toDate ? msg.timestamp.toDate() : new Date(msg.timestamp)
+  };
 };
 
 export function ChatInterface() {

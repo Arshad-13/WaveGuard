@@ -1,4 +1,4 @@
-// lib/chatbot.js
+// lib/chatbot.ts
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
 import { GoogleGenAI } from "@google/genai";
@@ -6,8 +6,8 @@ import axios from "axios";
 // import 'dotenv/config';
 const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
 
-let llm = null;
-let genAI = null;
+let llm: ChatGoogleGenerativeAI | null = null;
+let genAI: GoogleGenAI | null = null;
 
 // Only initialize if API key is available
 if (API_KEY) {
@@ -28,10 +28,10 @@ if (API_KEY) {
 
 /**
  * Builds prompt and executes chained LLM call with history.
- * @param {string} userInput - User message
- * @returns {Promise<string>} - Bot response
+ * @param messages - Array of user messages
+ * @returns Promise<string> - Bot response
  */
-export async function chatWithGemini(messages, username) {
+export async function chatWithGemini(messages: string[]): Promise<string> {
 if (!llm || !API_KEY) {
     throw new Error("Chatbot is currently unavailable. Please check back later.");
   }

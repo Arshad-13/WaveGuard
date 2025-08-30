@@ -30,6 +30,7 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+<<<<<<< HEAD
 # env files (can opt-in for committing if needed)
 .env*
 !.env.example
@@ -51,6 +52,8 @@ python-backend/.pytest_cache/
 python-backend/.mypy_cache/
 python-backend/.dmypy.json
 python-backend/dmypy.json
+=======
+>>>>>>> dd5fa7a3a5b3b05d63aa88e68b89e399ac98e5ec
 
 # ML Models (uncomment if you don't want to commit large model files)
 # *.pkl
@@ -63,6 +66,7 @@ python-backend/dmypy.json
 *.log
 logs/
 
+<<<<<<< HEAD
 # Debug and test files
 python-backend/test_client.py
 python-backend/simple_main.py
@@ -78,6 +82,8 @@ start-ml-api.sh
 start.sh
 public/test-api.html
 
+=======
+>>>>>>> dd5fa7a3a5b3b05d63aa88e68b89e399ac98e5ec
 # vercel
 .vercel
 
