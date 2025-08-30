@@ -5,7 +5,10 @@ import {
   ModelStatus,
   EarthquakeDataRequest,
   EarthquakeDataResponse,
-  TsunamiAnalysisResponse 
+  TsunamiAnalysisResponse,
+  UserLocationInput,
+  UserRiskAssessment,
+  USGSEarthquakeResponse
 } from '@/types/models';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_ML_API_URL || 'http://localhost:8000';
@@ -73,6 +76,18 @@ class ModelService {
       method: 'POST',
       body: JSON.stringify(request),
     });
+  }
+
+  // New USGS integration methods
+  async assessTsunamiRisk(input: UserLocationInput): Promise<UserRiskAssessment> {
+    return this.fetchAPI<UserRiskAssessment>('/assess/tsunami-risk', {
+      method: 'POST',
+      body: JSON.stringify(input),
+    });
+  }
+
+  async getUSGSEarthquakeData(feedType: string): Promise<USGSEarthquakeResponse> {
+    return this.fetchAPI<USGSEarthquakeResponse>(`/earthquakes/${feedType}`);
   }
 
   async checkConnection(): Promise<boolean> {
