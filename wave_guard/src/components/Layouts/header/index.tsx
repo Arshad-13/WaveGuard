@@ -8,7 +8,6 @@ import { useSidebarContext } from "../sidebar/sidebar-context";
 import { MenuIcon } from "./icons";
 import { Notification } from "./notification";
 // Theme toggle removed - using light theme only
-import { UserInfo } from "./user-info";
 import { ReportThreatModal } from "@/components/dashboard/ReportThreatModal";
 
 export function Header() {
@@ -73,9 +72,6 @@ export function Header() {
         {/* Right Side Actions */}
         <div className="flex items-center gap-4">
           <Notification />
-          <div className="shrink-0">
-            <UserInfo />
-          </div>
         </div>
       </div>
       

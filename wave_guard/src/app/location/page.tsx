@@ -77,7 +77,7 @@ export default function LocationPage() {
                 </label>
                 <select
                   value={feedType}
-                  onChange={(e) => setFeedType(e.target.value as any)}
+                  onChange={(e) => setFeedType(e.target.value as 'past_hour_m45' | 'past_day_m45' | 'past_hour_m25' | 'past_day_all' | 'past_week_m45' | 'past_month_m45')}
                   className="w-full p-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="past_hour_m45">🕐 Past Hour - Magnitude 4.5+</option>
@@ -253,7 +253,7 @@ export default function LocationPage() {
             </div>
             <div>
               <div className="font-medium text-gray-700">Data Source:</div>
-              <code className="bg-gray-200 px-2 py-1 rounded">GET /earthquakes/{feed_type}</code>
+              <code className="bg-gray-200 px-2 py-1 rounded">GET /earthquakes/past_hour_m45</code>
               <div className="text-gray-600 mt-1">Raw USGS earthquake data in GeoJSON format</div>
             </div>
           </div>

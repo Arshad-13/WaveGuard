@@ -11,11 +11,11 @@ export interface TsunamiPredictionInput {
 }
 
 export interface PredictionResponse {
-  prediction: any;
+  prediction: number | boolean | string | number[];
   confidence?: number;
   risk_level?: string;
   model_used: string;
-  input_features?: any;
+  input_features?: Record<string, unknown>;
   timestamp?: string;
   note?: string;
 }
@@ -126,7 +126,18 @@ export interface TsunamiAnalysisResponse {
   geological_context: GeologicalFeatures;
   recent_earthquake_analysis: {
     earthquakes_found: number;
-    risk_analysis: any;
+    risk_analysis: {
+      risk_level: string;
+      risk_score: number;
+      max_magnitude: number;
+      avg_magnitude: number;
+      total_earthquakes: number;
+      shallow_earthquakes: number;
+      tsunami_alerts: number;
+      analysis: string;
+      recommendations: string[];
+      tsunami_predictions?: TsunamiPredictionResult[];
+    };
     search_radius_km: number;
     time_period: string;
   };
@@ -166,84 +177,15 @@ export interface SafetyRecommendations {
   evacuation: string[];
 }
 
-// New types for USGS integration and enhanced risk assessment
-export interface UserLocationInput {
-  latitude: number;
-  longitude: number;
-  feed_type?: 'past_hour_m45' | 'past_day_m45' | 'past_hour_m25' | 'past_day_all' | 'past_week_m45' | 'past_month_m45';
-}
-
-export interface EarthquakeData {
-  id: string;
-  magnitude: number;
-  depth: number;
-  latitude: number;
-  longitude: number;
-  place: string;
-  time: number;
-  tsunami_flag: number;
-}
-
-export interface UserRiskZone {
-  risk_zone: 'High Risk' | 'Medium Risk' | 'Low Risk' | 'No Risk';
-  distance_km: number;
-  reasoning: string;
-}
-
-export interface EarthquakeAnalysis {
-  earthquake: {
-    id: string;
-    magnitude: number;
-    depth: number;
-    latitude: number;
-    longitude: number;
-    place: string;
-  };
-  tsunami_prediction: boolean;
-  tsunami_probability: number;
-  user_risk: UserRiskZone;
-}
-
-export interface HighestRiskInfo {
-  risk_zone: string;
-  distance_km: number;
-  reasoning: string;
-  earthquake?: {
-    id: string;
-    magnitude: number;
-    depth: number;
-    latitude: number;
-    longitude: number;
-    place: string;
-    tsunami_prediction: boolean;
-    tsunami_probability: number;
-  };
-}
-
 export interface UserRiskAssessment {
-  user_location: {
-    latitude: number;
-    longitude: number;
+  riskLevel: 'no_risk' | 'low' | 'medium' | 'high';
+  description: string;
+  nearestEarthquake?: {
+    magnitude: number;
+    distance: number;
+    location: string;
+    time: string;
   };
-  earthquake_count: number;
-  earthquakes_analyzed: EarthquakeAnalysis[];
-  highest_risk: HighestRiskInfo;
-  overall_status: 'All Clear' | 'Advisory' | 'Elevated Alert' | 'High Alert';
   recommendations: string[];
-  feed_info: {
-    feed_type: string;
-    source: string;
-    total_earthquakes_in_feed?: number;
-    last_updated: string;
-  };
-  timestamp: string;
-}
-
-export interface USGSEarthquakeResponse {
-  status: string;
-  count: number;
-  earthquakes: EarthquakeData[];
-  metadata: any;
-  feed_type: string;
-  message?: string;
+  lastUpdated: string;
 }

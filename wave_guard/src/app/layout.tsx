@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { FloatingChatbot } from "@/components/layout/FloatingChatbot";
+import { AuthProvider } from "@/lib/auth-context";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,11 +32,13 @@ export default function RootLayout({
       <body
         className={`${inter.variable} font-sans antialiased bg-ocean-50 min-h-screen`}
       >
-        <Navbar />
-        <main className="pt-20">
-          {children}
-        </main>
-        <FloatingChatbot />
+        <AuthProvider>
+          <Navbar />
+          <main className="pt-20">
+            {children}
+          </main>
+          <FloatingChatbot />
+        </AuthProvider>
       </body>
     </html>
   );

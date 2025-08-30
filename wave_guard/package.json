@@ -15,7 +15,11 @@
     "dev:full": "concurrently \"pnpm dev\" \"pnpm ml-api-win\"",
     "dev:api": "cd python-backend && python test_api.py"
   },
-  "dependencies": {
+"dependencies": {
+    "@google/genai": "^0.1.0",
+    "@google/generative-ai": "^0.1.0",
+    "@langchain/google-genai": "^0.1.0",
+    "marked": "^1.0.0",
     "@google/genai": "^1.16.0",
     "@google/generative-ai": "^0.24.1",
     "@googlemaps/js-api-loader": "^1.16.10",

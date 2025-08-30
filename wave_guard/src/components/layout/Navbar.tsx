@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X, Waves, Shield, AlertTriangle } from 'lucide-react';
 import { clsx } from 'clsx';
+import { UserInfo } from '@/components/Layouts/header/user-info';
 
 const navigation = [
   { name: 'Chatbot', href: '/chatbot', icon: Shield },
@@ -81,35 +82,35 @@ export function Navbar() {
             </div>
           </div>
 
-          {/* Status Indicator - Right Side (Desktop) */}
-          {/* <div className="hidden lg:flex items-center space-x-3">
-            <div className="flex items-center space-x-2 bg-green-100 px-4 py-2 rounded-full">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-sm font-bold text-green-700">System Online</span>
+          {/* Right Side - Profile & Mobile Menu */}
+          <div className="flex items-center space-x-3">
+            {/* Profile Picture - Desktop */}
+            <div className="hidden lg:flex items-center">
+              <UserInfo />
             </div>
-          </div> */}
 
-          {/* Mobile menu button */}
-          <div className="lg:hidden flex items-center">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="relative p-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 transition-all duration-300"
-            >
-              <div className="relative w-6 h-6">
-                <span className={clsx(
-                  'absolute block h-0.5 w-6 bg-current transform transition-all duration-300',
-                  isOpen ? 'rotate-45 top-2.5' : 'top-1'
-                )}></span>
-                <span className={clsx(
-                  'absolute block h-0.5 w-6 bg-current transition-all duration-300',
-                  isOpen ? 'opacity-0 top-2.5' : 'top-2.5'
-                )}></span>
-                <span className={clsx(
-                  'absolute block h-0.5 w-6 bg-current transform transition-all duration-300',
-                  isOpen ? '-rotate-45 top-2.5' : 'top-4'
-                )}></span>
-              </div>
-            </button>
+            {/* Mobile menu button */}
+            <div className="lg:hidden flex items-center">
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="relative p-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 transition-all duration-300"
+              >
+                <div className="relative w-6 h-6">
+                  <span className={clsx(
+                    'absolute block h-0.5 w-6 bg-current transform transition-all duration-300',
+                    isOpen ? 'rotate-45 top-2.5' : 'top-1'
+                  )}></span>
+                  <span className={clsx(
+                    'absolute block h-0.5 w-6 bg-current transition-all duration-300',
+                    isOpen ? 'opacity-0 top-2.5' : 'top-2.5'
+                  )}></span>
+                  <span className={clsx(
+                    'absolute block h-0.5 w-6 bg-current transform transition-all duration-300',
+                    isOpen ? '-rotate-45 top-2.5' : 'top-4'
+                  )}></span>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -160,13 +161,10 @@ export function Navbar() {
               );
             })}
             
-            {/* Mobile Status
+            {/* Mobile Profile */}
             <div className="pt-4 mt-4 border-t border-gray-200">
-              <div className="flex items-center justify-center space-x-2 bg-green-100 px-4 py-3 rounded-2xl">
-                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-sm font-bold text-green-700">All Systems Online</span>
-              </div>
-            </div> */}
+              <UserInfo />
+            </div>
           </div>
         </div>
       </div>
