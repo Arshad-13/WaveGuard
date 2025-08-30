@@ -7,7 +7,7 @@
   "outputDirectory": ".next",
   "regions": ["iad1"],
   "env": {
-    "NEXT_PUBLIC_GOOGLE_MAPS_API_KEY": "@google-maps-api-key",
+    "NEXT_PUBLIC_GOOGLE_API_KEY": "@google-api-key",
     "NEXT_PUBLIC_BACKEND_URL": "@backend-url"
   },
   "functions": {
