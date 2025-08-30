@@ -6,7 +6,14 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "ml-api": "cd python-backend && python test_api.py",
+    "ml-api-win": "cd python-backend && \"/c/msys64/ucrt64/bin/python.exe\" test_api.py",
+    "ml-api-full": "cd python-backend && python main.py",
+    "ml-setup": "bash setup-python.sh",
+    "ml-setup:win": "setup-python.bat",
+    "dev:full": "concurrently \"pnpm dev\" \"pnpm ml-api-win\"",
+    "dev:api": "cd python-backend && python test_api.py"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -24,6 +31,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "concurrently": "^9.1.0",
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
     "tailwindcss": "^4",
