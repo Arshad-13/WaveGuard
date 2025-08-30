@@ -40,41 +40,12 @@ export const NAV_DATA = [
           },
         ],
       },
-    ],
-  },
-  {
-    label: "REPORTING",
-    items: [
-      {
-        title: "Report Incident",
-        url: "/report",
-        icon: Icons.FileText,
-        items: [],
-      },
       {
         title: "Community Reports",
         url: "/reports",
         icon: Icons.Users,
         items: [],
-      },
-      {
-        title: "Historical Data",
-        icon: Icons.BarChart,
-        items: [
-          {
-            title: "Incident History",
-            url: "/history/incidents",
-          },
-          {
-            title: "Weather Patterns",
-            url: "/history/weather",
-          },
-          {
-            title: "Seismic Activity",
-            url: "/history/seismic",
-          },
-        ],
-      },
+      }
     ],
   },
   {

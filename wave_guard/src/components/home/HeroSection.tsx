@@ -13,11 +13,6 @@ export function HeroSection() {
 
       {/* Content */}
       <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 text-center py-4">
-        {/* Hero Badge */}
-        <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm border border-white/20 px-6 py-3 rounded-full shadow-xl mb-8 mt-4">
-          <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-          <span className="text-sm font-bold text-white">🌊 Live Monitoring Active</span>
-        </div>
         
         {/* Main Heading */}
         <div className="mb-8">
