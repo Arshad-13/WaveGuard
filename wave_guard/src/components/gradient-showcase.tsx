@@ -34,12 +34,6 @@ const colorThemes = [
     category: 'Ocean',
   },
   {
-    name: 'Ocean Dark',
-    className: 'bg-ocean-dark',
-    description: 'Darkest ocean shade for contrast',
-    category: 'Ocean',
-  },
-  {
     name: 'Cyan Light',
     className: 'bg-cyan-light',
     description: 'Fresh cyan background',
@@ -129,12 +123,12 @@ export default function ColorThemeShowcase() {
   };
 
   return (
-    <div className="p-8 bg-white dark:bg-gray-dark">
+    <div className="p-8 bg-white">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-4 text-dark dark:text-white">
+        <h1 className="text-3xl font-bold text-center mb-4 text-gray-7">
           Modern Solid Color Themes
         </h1>
-        <p className="text-center text-dark-5 dark:text-dark-6 mb-8 max-w-2xl mx-auto">
+        <p className="text-center text-gray-6 mb-8 max-w-2xl mx-auto">
           Professional solid color themes for your WaveGuard application. Click on any color to copy its class name.
         </p>
 
@@ -147,7 +141,7 @@ export default function ColorThemeShowcase() {
               className={`px-4 py-2 rounded-lg font-medium transition-all ${
                 selectedCategory === category
                   ? 'bg-ocean-primary text-white shadow-md'
-                  : 'bg-gray-2 dark:bg-dark-2 text-dark-5 dark:text-dark-6 hover:bg-gray-3 dark:hover:bg-dark-3'
+                  : 'bg-gray-2 text-gray-6 hover:bg-gray-3'
               }`}
             >
               {category}
@@ -159,7 +153,7 @@ export default function ColorThemeShowcase() {
           {filteredThemes.map((theme) => (
             <div
               key={theme.className}
-              className="bg-white dark:bg-dark-2 rounded-lg shadow-card-2 overflow-hidden cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-card"
+              className="bg-white rounded-lg shadow-card-2 overflow-hidden cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-card"
               onClick={() => copyToClipboard(theme.className)}
             >
               <div className={`${theme.className} h-24 w-full flex items-center justify-center`}>
@@ -169,17 +163,17 @@ export default function ColorThemeShowcase() {
               </div>
               <div className="p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-semibold text-dark dark:text-white text-sm">
+                  <h3 className="font-semibold text-gray-7 text-sm">
                     {theme.name}
                   </h3>
                   <span className={`px-2 py-1 text-xs rounded-full text-white ${getCategoryColor(theme.category)}`}>
                     {theme.category}
                   </span>
                 </div>
-                <p className="text-xs text-dark-5 dark:text-dark-6 mb-3 leading-relaxed">
+                <p className="text-xs text-gray-6 mb-3 leading-relaxed">
                   {theme.description}
                 </p>
-                <code className="text-xs bg-gray-2 dark:bg-dark-3 px-2 py-1 rounded font-mono text-primary block truncate">
+                <code className="text-xs bg-gray-2 px-2 py-1 rounded font-mono text-primary block truncate">
                   {copiedColor === theme.className ? '✓ Copied!' : theme.className}
                 </code>
               </div>
@@ -187,15 +181,15 @@ export default function ColorThemeShowcase() {
           ))}
         </div>
 
-        <div className="mt-12 bg-gray-2 dark:bg-dark-2 rounded-lg p-6">
-          <h2 className="text-xl font-semibold text-dark dark:text-white mb-4">
+        <div className="mt-12 bg-gray-2 rounded-lg p-6">
+          <h2 className="text-xl font-semibold text-gray-7 mb-4">
             How to Use Solid Color Themes
           </h2>
-          <div className="space-y-4 text-dark-5 dark:text-dark-6">
+          <div className="space-y-4 text-gray-6">
             <p>
               <strong>Apply to components:</strong> Add the color class to any HTML element or React component.
             </p>
-            <pre className="bg-dark dark:bg-gray-dark text-white p-4 rounded overflow-x-auto text-sm">
+            <pre className="bg-gray-7 text-white p-4 rounded overflow-x-auto text-sm">
               <code>{`<!-- HTML -->\n<div class="bg-ocean-primary p-8">\n  <h2>Ocean Primary Background</h2>\n</div>\n\n{/* React/JSX */}\n<div className="bg-teal-medium rounded-lg p-6">\n  <p>Professional teal card</p>\n</div>\n\n{/* Button with hover */}\n<button className="bg-cyan-medium bg-hover-transition px-6 py-3 rounded">\n  Click Me\n</button>`}</code>
             </pre>
             <div className="grid md:grid-cols-2 gap-4 mt-6">

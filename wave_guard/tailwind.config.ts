@@ -6,7 +6,6 @@ const config: Config = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  darkMode: ['class'],
   theme: {
     extend: {
       fontFamily: {
@@ -59,20 +58,8 @@ const config: Config = {
           900: '#164e63',
         },
         stroke: '#E6EBF1',
-        'stroke-dark': '#27303E',
-        dark: {
-          DEFAULT: '#111928',
-          2: '#1F2A37',
-          3: '#374151',
-          4: '#4B5563',
-          5: '#6B7280',
-          6: '#9CA3AF',
-          7: '#D1D5DB',
-          8: '#E5E7EB',
-        },
         gray: {
           DEFAULT: '#EFF4FB',
-          dark: '#122031',
           1: '#F9FAFB',
           2: '#F3F4F6',
           3: '#E5E7EB',
@@ -83,7 +70,6 @@ const config: Config = {
         },
         green: {
           DEFAULT: '#22AD5C',
-          dark: '#1A8245',
           light: {
             DEFAULT: '#2CD673',
             1: '#10B981',
@@ -97,7 +83,6 @@ const config: Config = {
         },
         red: {
           DEFAULT: '#F23030',
-          dark: '#E10E0E',
           light: {
             DEFAULT: '#F56060',
             2: '#F89090',
@@ -109,7 +94,6 @@ const config: Config = {
         },
         blue: {
           DEFAULT: '#3C50E0',
-          dark: '#1C3FB7',
           light: {
             DEFAULT: '#5475E5',
             2: '#8099EC',
@@ -124,10 +108,6 @@ const config: Config = {
           },
         },
         yellow: {
-          dark: {
-            DEFAULT: '#F59E0B',
-            2: '#D97706',
-          },
           light: {
             DEFAULT: '#FCD34D',
             4: '#FFFBEB',

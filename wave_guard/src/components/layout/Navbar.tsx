@@ -44,7 +44,7 @@ export function Navbar() {
           {/* Centered Navigation - Desktop */}
           <div className="hidden lg:flex items-center justify-center flex-1">
             <div className="flex items-center space-x-2 bg-gray-100 rounded-2xl p-2">
-              <Link
+              {/* <Link
                 href="/"
                 className={clsx(
                   'flex items-center space-x-2 px-6 py-3 rounded-xl font-bold text-sm transition-all duration-300',
@@ -55,7 +55,7 @@ export function Navbar() {
               >
                 <Waves className="h-5 w-5" />
                 <span>Home</span>
-              </Link>
+              </Link> */}
               
               {navigation.map((item) => {
                 const Icon = item.icon;
@@ -82,12 +82,12 @@ export function Navbar() {
           </div>
 
           {/* Status Indicator - Right Side (Desktop) */}
-          <div className="hidden lg:flex items-center space-x-3">
+          {/* <div className="hidden lg:flex items-center space-x-3">
             <div className="flex items-center space-x-2 bg-green-100 px-4 py-2 rounded-full">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
               <span className="text-sm font-bold text-green-700">System Online</span>
             </div>
-          </div>
+          </div> */}
 
           {/* Mobile menu button */}
           <div className="lg:hidden flex items-center">
@@ -121,7 +121,7 @@ export function Navbar() {
       )}>
         <div className="bg-white/95 backdrop-blur-lg border-t border-gray-200/50 shadow-lg">
           <div className="px-6 py-6 space-y-3">
-            <Link
+            {/* <Link
               href="/"
               onClick={() => setIsOpen(false)}
               className={clsx(
@@ -134,7 +134,7 @@ export function Navbar() {
               <Waves className="h-6 w-6" />
               <span>Home</span>
               {isHome && <div className="ml-auto w-2 h-2 bg-white rounded-full animate-pulse"></div>}
-            </Link>
+            </Link> */}
             
             {navigation.map((item) => {
               const Icon = item.icon;
@@ -160,13 +160,13 @@ export function Navbar() {
               );
             })}
             
-            {/* Mobile Status */}
+            {/* Mobile Status
             <div className="pt-4 mt-4 border-t border-gray-200">
               <div className="flex items-center justify-center space-x-2 bg-green-100 px-4 py-3 rounded-2xl">
                 <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
                 <span className="text-sm font-bold text-green-700">All Systems Online</span>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

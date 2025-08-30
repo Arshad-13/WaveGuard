@@ -9,19 +9,19 @@ interface ReportThreatModalProps {
 }
 
 const threatTypes = [
-  { id: 'tsunami', label: 'Tsunami Warning', icon: '🌊', color: 'from-blue-500 to-cyan-500' },
-  { id: 'cyclone', label: 'Cyclone/Hurricane', icon: '🌪️', color: 'from-purple-500 to-pink-500' },
-  { id: 'erosion', label: 'Coastal Erosion', icon: '🏔️', color: 'from-orange-500 to-yellow-500' },
-  { id: 'pollution', label: 'Ocean Pollution', icon: '🛢️', color: 'from-red-500 to-orange-500' },
-  { id: 'wildlife', label: 'Wildlife Disturbance', icon: '🐟', color: 'from-green-500 to-teal-500' },
-  { id: 'other', label: 'Other Threat', icon: '⚠️', color: 'from-gray-500 to-gray-600' }
+  { id: 'tsunami', label: 'Tsunami Warning', icon: '🌊', color: 'bg-blue-600', borderColor: 'border-blue-600' },
+  { id: 'cyclone', label: 'Cyclone/Hurricane', icon: '🌪️', color: 'bg-purple-600', borderColor: 'border-purple-600' },
+  { id: 'erosion', label: 'Coastal Erosion', icon: '🏔️', color: 'bg-orange-600', borderColor: 'border-orange-600' },
+  { id: 'pollution', label: 'Ocean Pollution', icon: '🛢️', color: 'bg-red-600', borderColor: 'border-red-600' },
+  { id: 'wildlife', label: 'Wildlife Disturbance', icon: '🐟', color: 'bg-emerald-600', borderColor: 'border-emerald-600' },
+  { id: 'other', label: 'Other Threat', icon: '⚠️', color: 'bg-slate-600', borderColor: 'border-slate-600' }
 ];
 
 const urgencyLevels = [
-  { id: 'low', label: 'Low', color: 'bg-green-100 text-green-800 border-green-300' },
-  { id: 'medium', label: 'Medium', color: 'bg-yellow-100 text-yellow-800 border-yellow-300' },
-  { id: 'high', label: 'High', color: 'bg-orange-100 text-orange-800 border-orange-300' },
-  { id: 'critical', label: 'Critical', color: 'bg-red-100 text-red-800 border-red-300' }
+  { id: 'low', label: 'Low', color: 'bg-emerald-600 text-white border-emerald-600' },
+  { id: 'medium', label: 'Medium', color: 'bg-amber-600 text-white border-amber-600' },
+  { id: 'high', label: 'High', color: 'bg-orange-600 text-white border-orange-600' },
+  { id: 'critical', label: 'Critical', color: 'bg-red-600 text-white border-red-600' }
 ];
 
 export function ReportThreatModal({ isOpen, onClose }: ReportThreatModalProps) {
@@ -70,17 +70,17 @@ export function ReportThreatModal({ isOpen, onClose }: ReportThreatModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-ocean-200/50">
+    <div className="fixed inset-0 z-[70] flex items-start justify-center p-4 pt-24 pb-5 bg-transparent">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[calc(100vh-140px)] overflow-y-auto border border-gray-200">
         {/* Header */}
-        <div className="bg-gradient-to-r from-ocean-500 to-cyan-500 p-6 rounded-t-2xl">
+        <div className="bg-slate-900 p-6 rounded-t-2xl">
           <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-bold text-white flex items-center">
-                🚨 Report Coastal Threat
-              </h2>
-              <p className="text-ocean-100 mt-1">Help protect our coastal communities</p>
-            </div>
+                          <div>
+                <h2 className="text-2xl font-bold text-white flex items-center">
+                  🚨 Report Coastal Threat
+                </h2>
+                <p className="text-slate-300 mt-1">Help protect our coastal communities</p>
+              </div>
             <button
               onClick={onClose}
               className="p-2 hover:bg-white/20 rounded-full transition-colors"
@@ -105,7 +105,7 @@ export function ReportThreatModal({ isOpen, onClose }: ReportThreatModalProps) {
                   onClick={() => setFormData(prev => ({ ...prev, type: type.id }))}
                   className={`p-3 rounded-xl border-2 transition-all ${
                     formData.type === type.id
-                      ? `bg-gradient-to-r ${type.color} text-white border-transparent shadow-lg scale-105`
+                      ? `${type.color} text-white ${type.borderColor} shadow-lg scale-105`
                       : 'border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50'
                   }`}
                 >
@@ -131,7 +131,7 @@ export function ReportThreatModal({ isOpen, onClose }: ReportThreatModalProps) {
               type="text"
               value={formData.title}
               onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-ocean-500 focus:border-transparent transition-colors"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-colors"
               placeholder="Brief title describing the threat"
               required
             />
@@ -149,7 +149,7 @@ export function ReportThreatModal({ isOpen, onClose }: ReportThreatModalProps) {
                   type="text"
                   value={formData.location}
                   onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
-                  className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-ocean-500 focus:border-transparent transition-colors"
+                  className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-colors"
                   placeholder="Beach, harbor, coastal area"
                   required
                 />
@@ -163,7 +163,7 @@ export function ReportThreatModal({ isOpen, onClose }: ReportThreatModalProps) {
                 type="text"
                 value={formData.coordinates}
                 onChange={(e) => setFormData(prev => ({ ...prev, coordinates: e.target.value }))}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-ocean-500 focus:border-transparent transition-colors"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-colors"
                 placeholder="Lat, Long (e.g., 34.052, -118.244)"
               />
             </div>
@@ -182,7 +182,7 @@ export function ReportThreatModal({ isOpen, onClose }: ReportThreatModalProps) {
                   onClick={() => setFormData(prev => ({ ...prev, urgency: level.id }))}
                   className={`p-3 rounded-lg border-2 font-semibold transition-all ${
                     formData.urgency === level.id
-                      ? `${level.color} border-current shadow-lg scale-105`
+                      ? `${level.color} shadow-lg scale-105`
                       : 'border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50 text-gray-700'
                   }`}
                 >
@@ -201,7 +201,7 @@ export function ReportThreatModal({ isOpen, onClose }: ReportThreatModalProps) {
               value={formData.description}
               onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
               rows={4}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-ocean-500 focus:border-transparent transition-colors resize-none"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-colors resize-none"
               placeholder="Detailed description of the threat, including what you observed and when"
               required
             />
@@ -249,7 +249,7 @@ export function ReportThreatModal({ isOpen, onClose }: ReportThreatModalProps) {
             <button
               type="submit"
               disabled={isSubmitting || !formData.type || !formData.title || !formData.location || !formData.description}
-              className="flex-1 px-6 py-3 bg-gradient-to-r from-ocean-500 to-cyan-500 text-white rounded-lg hover:from-ocean-600 hover:to-cyan-600 font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              className="flex-1 px-6 py-3 bg-slate-900 text-white rounded-lg hover:bg-slate-800 font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
               {isSubmitting ? (
                 <>
