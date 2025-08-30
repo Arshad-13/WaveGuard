@@ -15,6 +15,8 @@ from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Dict, Any, Optional
 import uvicorn
+import requests
+import math
 
 # Load environment variables
 load_dotenv('.env.model')
@@ -52,6 +54,131 @@ app.add_middleware(
 # Global model storage
 models = {}
 model_metadata = {}
+
+# USGS API endpoints
+USGS_FEEDS = {
+    'past_hour_m45': 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_hour.geojson',
+    'past_day_m45': 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_day.geojson',
+    'past_hour_m25': 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_hour.geojson',
+    'past_day_all': 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson',
+    'past_week_m45': 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson',
+    'past_month_m45': 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojson'
+}
+
+def fetch_usgs_earthquake_data(feed_type: str = 'past_day_m45') -> Dict[str, Any]:
+    """Fetch earthquake data from USGS feed APIs"""
+    try:
+        if feed_type not in USGS_FEEDS:
+            raise ValueError(f"Invalid feed type. Available: {list(USGS_FEEDS.keys())}")
+        
+        url = USGS_FEEDS[feed_type]
+        logger.info(f"Fetching earthquake data from: {url}")
+        
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        
+        data = response.json()
+        
+        # Extract earthquake features
+        earthquakes = []
+        for feature in data.get('features', []):
+            props = feature.get('properties', {})
+            geom = feature.get('geometry', {})
+            coords = geom.get('coordinates', [0, 0, 0])
+            
+            earthquake = {
+                'id': feature.get('id'),
+                'magnitude': props.get('mag'),
+                'depth': coords[2] if len(coords) > 2 else 0,
+                'latitude': coords[1],
+                'longitude': coords[0],
+                'place': props.get('place'),
+                'time': props.get('time'),
+                'tsunami_flag': props.get('tsunami', 0)
+            }
+            earthquakes.append(earthquake)
+        
+        return {
+            'status': 'success',
+            'count': len(earthquakes),
+            'earthquakes': earthquakes,
+            'metadata': data.get('metadata', {}),
+            'feed_type': feed_type
+        }
+        
+    except requests.RequestException as e:
+        logger.error(f"USGS API request failed: {e}")
+        return {
+            'status': 'error',
+            'message': f"Failed to fetch earthquake data: {str(e)}",
+            'count': 0,
+            'earthquakes': []
+        }
+    except Exception as e:
+        logger.error(f"Error processing earthquake data: {e}")
+        return {
+            'status': 'error',
+            'message': f"Error processing data: {str(e)}",
+            'count': 0,
+            'earthquakes': []
+        }
+
+def haversine_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    """Calculate the great circle distance between two points in kilometers"""
+    # Convert latitude and longitude from degrees to radians
+    lat1, lon1, lat2, lon2 = map(math.radians, [lat1, lon1, lat2, lon2])
+    
+    # Haversine formula
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+    a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
+    c = 2 * math.asin(math.sqrt(a))
+    
+    # Radius of earth in kilometers
+    r = 6371
+    
+    return c * r
+
+def classify_user_risk_zone(earthquake_lat: float, earthquake_lon: float, 
+                           user_lat: float, user_lon: float, 
+                           tsunami_predicted: bool, tsunami_probability: float) -> Dict[str, Any]:
+    """Classify user risk zone based on distance from earthquake epicenter"""
+    
+    # Calculate distance between earthquake and user
+    distance_km = haversine_distance(earthquake_lat, earthquake_lon, user_lat, user_lon)
+    
+    # If no tsunami is predicted, risk is minimal regardless of distance
+    if not tsunami_predicted or tsunami_probability < 0.3:
+        return {
+            'risk_zone': 'No Risk',
+            'distance_km': round(distance_km, 2),
+            'reasoning': 'No tsunami predicted for this earthquake'
+        }
+    
+    # Risk zones based on distance and tsunami probability
+    if distance_km <= 100:  # Within 100km
+        if tsunami_probability >= 0.7:
+            risk_zone = 'High Risk'
+        else:
+            risk_zone = 'Medium Risk'
+    elif distance_km <= 500:  # 100-500km
+        if tsunami_probability >= 0.8:
+            risk_zone = 'Medium Risk'
+        else:
+            risk_zone = 'Low Risk'
+    elif distance_km <= 1000:  # 500-1000km
+        if tsunami_probability >= 0.8:
+            risk_zone = 'Low Risk'
+        else:
+            risk_zone = 'No Risk'
+    else:  # > 1000km
+        risk_zone = 'No Risk'
+    
+    return {
+        'risk_zone': risk_zone,
+        'distance_km': round(distance_km, 2),
+        'reasoning': f'Distance: {round(distance_km, 2)}km, Tsunami probability: {round(tsunami_probability * 100, 1)}%'
+    }
 
 def get_models_path():
     """Dynamically find models directory"""
@@ -118,19 +245,19 @@ class TsunamiInput(BaseModel):
     latitude: float = Field(..., ge=-90.0, le=90.0, description="Latitude in degrees")
     longitude: float = Field(..., ge=-180.0, le=180.0, description="Longitude in degrees")
 
-class TsunamiAdvancedInput(BaseModel):
-    """Advanced tsunami prediction with full feature control"""
-    eq_magnitude: float = Field(..., description="Earthquake magnitude")
-    eq_depth: float = Field(..., description="Earthquake depth in km")
-    latitude: float = Field(..., description="Latitude")
-    longitude: float = Field(..., description="Longitude")
-    mag_squared: Optional[float] = Field(None, description="Magnitude squared (auto-calculated)")
-    is_major_eq: Optional[int] = Field(None, description="1 if magnitude >= 7.0")
-    is_shallow: Optional[int] = Field(None, description="1 if depth <= 70km")
-    is_oceanic: Optional[int] = Field(None, description="1 if oceanic location")
-    risk_zone_encoded: Optional[int] = Field(0, description="Risk zone category (0-4)")
-    mag_category_encoded: Optional[int] = Field(0, description="Magnitude category")
-    depth_category_encoded: Optional[int] = Field(0, description="Depth category")
+# class TsunamiAdvancedInput(BaseModel):
+#     """Advanced tsunami prediction with full feature control"""
+#     eq_magnitude: float = Field(..., description="Earthquake magnitude")
+#     eq_depth: float = Field(..., description="Earthquake depth in km")
+#     latitude: float = Field(..., description="Latitude")
+#     longitude: float = Field(..., description="Longitude")
+#     mag_squared: Optional[float] = Field(None, description="Magnitude squared (auto-calculated)")
+#     is_major_eq: Optional[int] = Field(None, description="1 if magnitude >= 7.0")
+#     is_shallow: Optional[int] = Field(None, description="1 if depth <= 70km")
+#     is_oceanic: Optional[int] = Field(None, description="1 if oceanic location")
+#     risk_zone_encoded: Optional[int] = Field(0, description="Risk zone category (0-4)")
+#     mag_category_encoded: Optional[int] = Field(0, description="Magnitude category")
+#     depth_category_encoded: Optional[int] = Field(0, description="Depth category")
 
 class CycloneInput(BaseModel):
     """Cyclone prediction input"""
@@ -151,6 +278,34 @@ class HealthResponse(BaseModel):
     models_loaded: int
     available_models: List[str]
     uptime: Optional[str] = None
+
+class UserLocationInput(BaseModel):
+    """User location input for risk assessment"""
+    latitude: float = Field(..., ge=-90.0, le=90.0, description="User latitude in degrees")
+    longitude: float = Field(..., ge=-180.0, le=180.0, description="User longitude in degrees")
+    feed_type: Optional[str] = Field('past_day_m45', description="USGS feed type to check")
+
+class EarthquakeData(BaseModel):
+    """Individual earthquake data structure"""
+    id: str
+    magnitude: float
+    depth: float
+    latitude: float
+    longitude: float
+    place: str
+    time: int
+    tsunami_flag: int
+
+class UserRiskAssessment(BaseModel):
+    """User risk assessment response"""
+    user_location: Dict[str, float]
+    earthquake_count: int
+    earthquakes_analyzed: List[Dict[str, Any]]
+    highest_risk: Dict[str, Any]
+    overall_status: str
+    recommendations: List[str]
+    feed_info: Dict[str, Any]
+    timestamp: str
 
 # Utility functions
 def engineer_tsunami_features(input_data: TsunamiInput) -> List[float]:
@@ -328,55 +483,55 @@ async def predict_tsunami(
         logger.error(f"Tsunami prediction error: {e}")
         raise HTTPException(status_code=400, detail=f"Prediction failed: {str(e)}")
 
-@app.post("/predict/tsunami/advanced", response_model=PredictionResponse)
-async def predict_tsunami_advanced(
-    input_data: TsunamiAdvancedInput,
-    model_data: tuple = Depends(get_tsunami_model)
-):
-    """Advanced tsunami prediction with full feature control"""
-    try:
-        model, metadata = model_data
+# @app.post("/predict/tsunami/advanced", response_model=PredictionResponse)
+# async def predict_tsunami_advanced(
+#     input_data: TsunamiAdvancedInput,
+#     model_data: tuple = Depends(get_tsunami_model)
+# ):
+#     """Advanced tsunami prediction with full feature control"""
+#     try:
+#         model, metadata = model_data
         
-        # Build feature array with provided or calculated values
-        features = [
-            input_data.eq_magnitude,
-            input_data.eq_depth,
-            input_data.latitude,
-            input_data.longitude,
-            input_data.mag_squared or (input_data.eq_magnitude ** 2),
-            input_data.is_major_eq if input_data.is_major_eq is not None else (1 if input_data.eq_magnitude >= 7.0 else 0),
-            input_data.is_shallow if input_data.is_shallow is not None else (1 if input_data.eq_depth <= 70 else 0),
-            input_data.is_oceanic or 0,
-            input_data.risk_zone_encoded,
-            input_data.mag_category_encoded,
-            input_data.depth_category_encoded
-        ]
+#         # Build feature array with provided or calculated values
+#         features = [
+#             input_data.eq_magnitude,
+#             input_data.eq_depth,
+#             input_data.latitude,
+#             input_data.longitude,
+#             input_data.mag_squared or (input_data.eq_magnitude ** 2),
+#             input_data.is_major_eq if input_data.is_major_eq is not None else (1 if input_data.eq_magnitude >= 7.0 else 0),
+#             input_data.is_shallow if input_data.is_shallow is not None else (1 if input_data.eq_depth <= 70 else 0),
+#             input_data.is_oceanic or 0,
+#             input_data.risk_zone_encoded,
+#             input_data.mag_category_encoded,
+#             input_data.depth_category_encoded
+#         ]
         
-        features_array = np.array(features).reshape(1, -1)
+#         features_array = np.array(features).reshape(1, -1)
         
-        # Scale features
-        scaler = metadata['scaler']
-        features_scaled = scaler.transform(features_array)
+#         # Scale features
+#         scaler = metadata['scaler']
+#         features_scaled = scaler.transform(features_array)
         
-        # Make prediction
-        prediction = model.predict(features_scaled)
+#         # Make prediction
+#         prediction = model.predict(features_scaled)
         
-        # Get confidence
-        confidence = None
-        if hasattr(model, 'predict_proba'):
-            proba = model.predict_proba(features_scaled)
-            confidence = float(proba[0][1]) if len(proba[0]) > 1 else float(np.max(proba))
+#         # Get confidence
+#         confidence = None
+#         if hasattr(model, 'predict_proba'):
+#             proba = model.predict_proba(features_scaled)
+#             confidence = float(proba[0][1]) if len(proba[0]) > 1 else float(np.max(proba))
         
-        return PredictionResponse(
-            prediction=bool(prediction[0]),
-            confidence=confidence,
-            risk_level=determine_risk_level(confidence or 0),
-            model_used="tsunami_predictor_advanced"
-        )
+#         return PredictionResponse(
+#             prediction=bool(prediction[0]),
+#             confidence=confidence,
+#             risk_level=determine_risk_level(confidence or 0),
+#             model_used="tsunami_predictor_advanced"
+#         )
         
-    except Exception as e:
-        logger.error(f"Advanced tsunami prediction error: {e}")
-        raise HTTPException(status_code=400, detail=f"Prediction failed: {str(e)}")
+#     except Exception as e:
+#         logger.error(f"Advanced tsunami prediction error: {e}")
+#         raise HTTPException(status_code=400, detail=f"Prediction failed: {str(e)}")
 
 @app.post("/predict/cyclone", response_model=PredictionResponse)
 async def predict_cyclone(
@@ -406,6 +561,199 @@ async def predict_cyclone(
     except Exception as e:
         logger.error(f"Cyclone prediction error: {e}")
         raise HTTPException(status_code=400, detail=f"Prediction failed: {str(e)}")
+
+@app.post("/assess/tsunami-risk", response_model=UserRiskAssessment)
+async def assess_tsunami_risk(
+    user_input: UserLocationInput,
+    model_data: tuple = Depends(get_tsunami_model)
+):
+    """Assess tsunami risk for user location based on recent earthquakes"""
+    try:
+        model, metadata = model_data
+        
+        # Fetch recent earthquake data from USGS
+        earthquake_data = fetch_usgs_earthquake_data(user_input.feed_type)
+        
+        if earthquake_data['status'] == 'error':
+            raise HTTPException(status_code=503, detail=f"USGS API error: {earthquake_data['message']}")
+        
+        earthquakes = earthquake_data['earthquakes']
+        
+        # Handle case when no earthquakes are found
+        if earthquake_data['count'] == 0:
+            return UserRiskAssessment(
+                user_location={
+                    "latitude": user_input.latitude,
+                    "longitude": user_input.longitude
+                },
+                earthquake_count=0,
+                earthquakes_analyzed=[],
+                highest_risk={
+                    "risk_zone": "No Risk",
+                    "distance_km": 0,
+                    "reasoning": "No recent earthquakes found in the selected timeframe"
+                },
+                overall_status="All Clear",
+                recommendations=[
+                    "No recent significant earthquakes detected",
+                    "Continue normal activities",
+                    "Stay informed about earthquake alerts"
+                ],
+                feed_info={
+                    "feed_type": user_input.feed_type,
+                    "source": "USGS",
+                    "last_updated": datetime.now().isoformat()
+                },
+                timestamp=datetime.now().isoformat()
+            )
+        
+        # Analyze each earthquake for tsunami risk
+        analyzed_earthquakes = []
+        max_risk_level = "No Risk"
+        max_risk_earthquake = None
+        
+        for eq in earthquakes:
+            # Skip earthquakes with invalid data
+            if not all([eq['magnitude'], eq['latitude'], eq['longitude']]):
+                continue
+                
+            # Create TsunamiInput for this earthquake
+            eq_input = TsunamiInput(
+                magnitude=eq['magnitude'],
+                depth=abs(eq['depth']),  # Ensure positive depth
+                latitude=eq['latitude'],
+                longitude=eq['longitude']
+            )
+            
+            # Engineer features and make prediction
+            features = engineer_tsunami_features(eq_input)
+            features_array = np.array(features).reshape(1, -1)
+            features_scaled = metadata['scaler'].transform(features_array)
+            
+            # Get tsunami prediction
+            tsunami_prediction = model.predict(features_scaled)[0]
+            tsunami_probability = 0.0
+            
+            if hasattr(model, 'predict_proba'):
+                proba = model.predict_proba(features_scaled)
+                tsunami_probability = float(proba[0][1]) if len(proba[0]) > 1 else float(np.max(proba))
+            
+            # Calculate user risk zone
+            risk_assessment = classify_user_risk_zone(
+                eq['latitude'], eq['longitude'],
+                user_input.latitude, user_input.longitude,
+                bool(tsunami_prediction), tsunami_probability
+            )
+            
+            # Track the highest risk earthquake
+            risk_levels = {"No Risk": 0, "Low Risk": 1, "Medium Risk": 2, "High Risk": 3}
+            if risk_levels.get(risk_assessment['risk_zone'], 0) > risk_levels.get(max_risk_level, 0):
+                max_risk_level = risk_assessment['risk_zone']
+                max_risk_earthquake = {
+                    **risk_assessment,
+                    'earthquake': {
+                        'id': eq['id'],
+                        'magnitude': eq['magnitude'],
+                        'depth': eq['depth'],
+                        'latitude': eq['latitude'],
+                        'longitude': eq['longitude'],
+                        'place': eq['place'],
+                        'tsunami_prediction': bool(tsunami_prediction),
+                        'tsunami_probability': tsunami_probability
+                    }
+                }
+            
+            # Add to analyzed earthquakes
+            analyzed_earthquakes.append({
+                'earthquake': {
+                    'id': eq['id'],
+                    'magnitude': eq['magnitude'],
+                    'depth': eq['depth'],
+                    'latitude': eq['latitude'],
+                    'longitude': eq['longitude'],
+                    'place': eq['place']
+                },
+                'tsunami_prediction': bool(tsunami_prediction),
+                'tsunami_probability': round(tsunami_probability, 3),
+                'user_risk': risk_assessment
+            })
+        
+        # Determine overall status
+        if max_risk_level == "High Risk":
+            overall_status = "High Alert"
+            recommendations = [
+                "⚠️ HIGH TSUNAMI RISK detected nearby",
+                "Move to higher ground immediately",
+                "Stay away from coastal areas",
+                "Monitor emergency broadcasts",
+                "Have emergency supplies ready"
+            ]
+        elif max_risk_level == "Medium Risk":
+            overall_status = "Elevated Alert"
+            recommendations = [
+                "⚠️ MODERATE TSUNAMI RISK detected",
+                "Stay alert and avoid beaches",
+                "Monitor official tsunami warnings",
+                "Be prepared to evacuate if advised",
+                "Keep emergency kit accessible"
+            ]
+        elif max_risk_level == "Low Risk":
+            overall_status = "Advisory"
+            recommendations = [
+                "Low tsunami risk detected",
+                "Stay informed about updates",
+                "Normal activities can continue",
+                "Be aware of tsunami evacuation routes"
+            ]
+        else:
+            overall_status = "All Clear"
+            recommendations = [
+                "No significant tsunami risk detected",
+                "Continue normal activities",
+                "Stay informed about earthquake alerts"
+            ]
+        
+        return UserRiskAssessment(
+            user_location={
+                "latitude": user_input.latitude,
+                "longitude": user_input.longitude
+            },
+            earthquake_count=len(analyzed_earthquakes),
+            earthquakes_analyzed=analyzed_earthquakes,
+            highest_risk=max_risk_earthquake or {
+                "risk_zone": "No Risk",
+                "distance_km": 0,
+                "reasoning": "No earthquakes with tsunami potential found"
+            },
+            overall_status=overall_status,
+            recommendations=recommendations,
+            feed_info={
+                "feed_type": user_input.feed_type,
+                "source": "USGS",
+                "total_earthquakes_in_feed": earthquake_data['count'],
+                "last_updated": datetime.now().isoformat()
+            },
+            timestamp=datetime.now().isoformat()
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Risk assessment error: {e}")
+        raise HTTPException(status_code=500, detail=f"Risk assessment failed: {str(e)}")
+
+@app.get("/earthquakes/{feed_type}")
+async def get_earthquake_feed(feed_type: str):
+    """Get recent earthquake data from USGS feeds"""
+    if feed_type not in USGS_FEEDS:
+        raise HTTPException(status_code=400, detail=f"Invalid feed type. Available: {list(USGS_FEEDS.keys())}")
+    
+    earthquake_data = fetch_usgs_earthquake_data(feed_type)
+    
+    if earthquake_data['status'] == 'error':
+        raise HTTPException(status_code=503, detail=earthquake_data['message'])
+    
+    return earthquake_data
 
 # Startup event
 @app.on_event("startup")
