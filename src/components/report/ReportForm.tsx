@@ -117,23 +117,30 @@ export function ReportForm() {
   if (isSubmitted) {
     return (
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white/70 dark:bg-dark-2/70 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-dark-3/50 p-8 text-center">
-          <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-            <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
+        <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-8 text-center shadow-lg">
+          <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <CheckCircle className="h-10 w-10 text-white" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
             Report Submitted Successfully!
           </h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-6">
-            Thank you for helping protect our coastal environment. Your report has been received and will be reviewed by our team.
+          <p className="text-gray-700 mb-8 text-lg leading-relaxed">
+            Thank you for being a coastal guardian. Your report has been received and will be reviewed by our environmental protection team within 24 hours.
           </p>
-          <div className="bg-gray-50 dark:bg-dark-3/50 rounded-lg p-4 mb-6">
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-              <strong>Report ID:</strong> WG-{Date.now().toString().slice(-6)}
-            </p>
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-              <strong>Status:</strong> Under Review
-            </p>
+          <div className="bg-white rounded-xl p-6 mb-8 shadow-inner border border-green-100">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+              <div>
+                <p className="text-sm font-semibold text-gray-600 mb-1">Report ID</p>
+                <p className="text-lg font-bold text-gray-900">WG-{Date.now().toString().slice(-6)}</p>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-600 mb-1">Status</p>
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
+                  <p className="text-lg font-bold text-gray-900">Under Review</p>
+                </div>
+              </div>
+            </div>
           </div>
           <button
             onClick={() => {
@@ -149,7 +156,7 @@ export function ReportForm() {
                 images: []
               });
             }}
-            className="bg-ocean-500 hover:bg-ocean-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg transform hover:scale-105 transition-all duration-300"
           >
             Submit Another Report
           </button>
@@ -159,78 +166,84 @@ export function ReportForm() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <form onSubmit={handleSubmit} className="bg-white/70 dark:bg-dark-2/70 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-dark-3/50 p-8">
+    <div className="space-y-8">
+      <form onSubmit={handleSubmit} className="space-y-8">
         
         {/* Location */}
-        <div className="mb-6">
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-            <MapPin className="inline h-4 w-4 mr-1" />
+        <div>
+          <label className="flex items-center text-lg font-bold text-gray-900 mb-3">
+            <MapPin className="h-5 w-5 mr-2 text-blue-600" />
             Location *
           </label>
           <input
             type="text"
             value={formData.location}
             onChange={(e) => handleInputChange('location', e.target.value)}
-            placeholder="e.g., Santa Monica Beach, near Pier, or coordinates"
+            placeholder="e.g., Santa Monica Beach, Pier Area, GPS coordinates"
             className={clsx(
-              'w-full px-4 py-3 bg-white dark:bg-dark-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-ocean-500',
-              errors.location ? 'border-red-500' : 'border-gray-200 dark:border-dark-4'
+              'w-full px-6 py-4 bg-white border-2 rounded-xl text-lg font-medium focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300',
+              errors.location ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-blue-300'
             )}
           />
           {errors.location && (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.location}</p>
+            <p className="mt-2 text-red-600 font-semibold flex items-center">
+              <AlertTriangle className="h-4 w-4 mr-1" />
+              {errors.location}
+            </p>
           )}
         </div>
 
         {/* Issue Type */}
-        <div className="mb-6">
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-            Type of Issue *
+        <div>
+          <label className="block text-lg font-bold text-gray-900 mb-4">
+            Type of Coastal Issue *
           </label>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {issueTypes.map((type) => (
               <button
                 key={type.value}
                 type="button"
                 onClick={() => handleInputChange('issueType', type.value)}
                 className={clsx(
-                  'p-3 border rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105',
+                  'p-4 border-2 rounded-xl text-center font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg',
                   formData.issueType === type.value
-                    ? 'border-ocean-500 bg-ocean-50 text-ocean-700 dark:bg-ocean-900/30 dark:text-ocean-300'
-                    : 'border-gray-200 dark:border-dark-4 bg-white dark:bg-dark-3 text-gray-700 dark:text-gray-300 hover:border-ocean-300'
+                    ? 'border-blue-500 bg-blue-50 text-blue-700 shadow-lg scale-105'
+                    : 'border-gray-200 bg-white text-gray-700 hover:border-blue-300 hover:bg-blue-50'
                 )}
               >
-                <div className="text-lg mb-1">{type.icon}</div>
-                {type.label}
+                <div className="text-2xl mb-2">{type.icon}</div>
+                <div className="text-sm">{type.label}</div>
               </button>
             ))}
           </div>
           {errors.issueType && (
-            <p className="mt-2 text-sm text-red-600 dark:text-red-400">{errors.issueType}</p>
+            <p className="mt-3 text-red-600 font-semibold flex items-center">
+              <AlertTriangle className="h-4 w-4 mr-1" />
+              {errors.issueType}
+            </p>
           )}
         </div>
 
         {/* Urgency */}
-        <div className="mb-6">
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+        <div>
+          <label className="block text-lg font-bold text-gray-900 mb-4">
             Urgency Level
           </label>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 gap-4">
             {[
-              { value: 'low', label: 'Low', color: 'green' },
-              { value: 'medium', label: 'Medium', color: 'yellow' },
-              { value: 'high', label: 'High', color: 'red' }
+              { value: 'low', label: 'Low Priority', color: 'green', bgColor: 'bg-green-50', borderColor: 'border-green-500', textColor: 'text-green-700' },
+              { value: 'medium', label: 'Medium Priority', color: 'yellow', bgColor: 'bg-yellow-50', borderColor: 'border-yellow-500', textColor: 'text-yellow-700' },
+              { value: 'high', label: 'High Priority', color: 'red', bgColor: 'bg-red-50', borderColor: 'border-red-500', textColor: 'text-red-700' }
             ].map((urgency) => (
               <button
                 key={urgency.value}
                 type="button"
                 onClick={() => handleInputChange('urgency', urgency.value)}
                 className={clsx(
-                  'p-3 border rounded-lg text-sm font-medium transition-all duration-200',
+                  'p-4 border-2 rounded-xl font-bold text-center transition-all duration-300 transform hover:scale-105',
                   formData.urgency === urgency.value
-                    ? `border-${urgency.color}-500 bg-${urgency.color}-50 text-${urgency.color}-700 dark:bg-${urgency.color}-900/30 dark:text-${urgency.color}-300`
-                    : 'border-gray-200 dark:border-dark-4 bg-white dark:bg-dark-3 text-gray-700 dark:text-gray-300 hover:border-gray-300'
+                    ? `${urgency.borderColor} ${urgency.bgColor} ${urgency.textColor} shadow-lg scale-105`
+                    : 'border-gray-200 bg-white text-gray-700 hover:border-gray-400'
                 )}
               >
                 {urgency.label}
@@ -240,34 +253,37 @@ export function ReportForm() {
         </div>
 
         {/* Description */}
-        <div className="mb-6">
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-            Description *
+        <div>
+          <label className="block text-lg font-bold text-gray-900 mb-3">
+            Detailed Description *
           </label>
           <textarea
             value={formData.description}
             onChange={(e) => handleInputChange('description', e.target.value)}
-            rows={4}
-            placeholder="Please provide detailed information about what you observed, when it occurred, and any other relevant details..."
+            rows={5}
+            placeholder="Provide detailed information: What did you observe? When did it occur? Location specifics? People involved? Environmental impact? Any immediate dangers?"
             className={clsx(
-              'w-full px-4 py-3 bg-white dark:bg-dark-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-ocean-500 resize-none',
-              errors.description ? 'border-red-500' : 'border-gray-200 dark:border-dark-4'
+              'w-full px-6 py-4 bg-white border-2 rounded-xl text-lg resize-none focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300',
+              errors.description ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-blue-300'
             )}
           />
           {errors.description && (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.description}</p>
+            <p className="mt-2 text-red-600 font-semibold flex items-center">
+              <AlertTriangle className="h-4 w-4 mr-1" />
+              {errors.description}
+            </p>
           )}
         </div>
 
         {/* Image Upload */}
-        <div className="mb-6">
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-            Upload Images (Optional)
+        <div>
+          <label className="block text-lg font-bold text-gray-900 mb-3">
+            Upload Evidence Photos (Optional)
           </label>
-          <div className="border-2 border-dashed border-gray-300 dark:border-dark-4 rounded-lg p-6 text-center">
-            <Upload className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-            <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-              Drag & drop images here or click to browse
+          <div className="border-3 border-dashed border-blue-300 bg-blue-50 rounded-xl p-8 text-center hover:border-blue-500 hover:bg-blue-100 transition-all duration-300">
+            <Upload className="h-12 w-12 text-blue-500 mx-auto mb-4" />
+            <p className="text-lg font-semibold text-gray-700 mb-2">
+              Drag & drop photos here or click to select
             </p>
             <input
               type="file"
@@ -279,33 +295,33 @@ export function ReportForm() {
             />
             <label
               htmlFor="image-upload"
-              className="cursor-pointer bg-ocean-500 hover:bg-ocean-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              className="cursor-pointer bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-6 py-3 rounded-xl font-bold text-lg shadow-lg transform hover:scale-105 transition-all duration-300 inline-block"
             >
-              Choose Files
+              Choose Photos
             </label>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-              Max 5 images, 5MB each. JPG, PNG formats only.
+            <p className="text-sm font-semibold text-gray-600 mt-3">
+              Maximum 5 photos, 5MB each. JPG, PNG formats accepted.
             </p>
           </div>
 
           {/* Image Preview */}
           {formData.images.length > 0 && (
-            <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-4">
+            <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
               {formData.images.map((file, index) => (
                 <div key={index} className="relative group">
                   <img
                     src={URL.createObjectURL(file)}
-                    alt={`Upload ${index + 1}`}
-                    className="w-full h-20 object-cover rounded-lg border border-gray-200 dark:border-dark-4"
+                    alt={`Evidence ${index + 1}`}
+                    className="w-full h-24 object-cover rounded-lg border-2 border-gray-200 shadow-md"
                   />
                   <button
                     type="button"
                     onClick={() => removeImage(index)}
-                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform hover:scale-110"
                   >
-                    <X className="h-3 w-3" />
+                    <X className="h-4 w-4" />
                   </button>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate">
+                  <p className="text-xs font-medium text-gray-600 mt-1 truncate text-center">
                     {file.name}
                   </p>
                 </div>
@@ -315,79 +331,93 @@ export function ReportForm() {
         </div>
 
         {/* Reporter Information */}
-        <div className="border-t border-gray-200 dark:border-dark-4 pt-6 mb-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            Your Information
+        <div className="border-t-4 border-gray-200 pt-8">
+          <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
+              <span className="text-white font-bold text-lg">i</span>
+            </div>
+            Your Contact Information
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-lg font-bold text-gray-900 mb-3">
                 Full Name *
               </label>
               <input
                 type="text"
                 value={formData.reporterName}
                 onChange={(e) => handleInputChange('reporterName', e.target.value)}
+                placeholder="Enter your full name"
                 className={clsx(
-                  'w-full px-4 py-3 bg-white dark:bg-dark-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-ocean-500',
-                  errors.reporterName ? 'border-red-500' : 'border-gray-200 dark:border-dark-4'
+                  'w-full px-6 py-4 bg-white border-2 rounded-xl text-lg font-medium focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300',
+                  errors.reporterName ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-blue-300'
                 )}
               />
               {errors.reporterName && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.reporterName}</p>
+                <p className="mt-2 text-red-600 font-semibold flex items-center">
+                  <AlertTriangle className="h-4 w-4 mr-1" />
+                  {errors.reporterName}
+                </p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Phone (Optional)
+              <label className="block text-lg font-bold text-gray-900 mb-3">
+                Phone Number (Optional)
               </label>
               <input
                 type="tel"
                 value={formData.reporterPhone}
                 onChange={(e) => handleInputChange('reporterPhone', e.target.value)}
-                className="w-full px-4 py-3 bg-white dark:bg-dark-3 border border-gray-200 dark:border-dark-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-ocean-500"
+                placeholder="Your phone number"
+                className="w-full px-6 py-4 bg-white border-2 border-gray-200 rounded-xl text-lg font-medium focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 hover:border-blue-300 transition-all duration-300"
               />
             </div>
           </div>
 
-          <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <div className="mt-6">
+            <label className="block text-lg font-bold text-gray-900 mb-3">
               Email Address *
             </label>
             <input
               type="email"
               value={formData.reporterEmail}
               onChange={(e) => handleInputChange('reporterEmail', e.target.value)}
+              placeholder="your.email@example.com"
               className={clsx(
-                'w-full px-4 py-3 bg-white dark:bg-dark-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-ocean-500',
-                errors.reporterEmail ? 'border-red-500' : 'border-gray-200 dark:border-dark-4'
+                'w-full px-6 py-4 bg-white border-2 rounded-xl text-lg font-medium focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300',
+                errors.reporterEmail ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-blue-300'
               )}
             />
             {errors.reporterEmail && (
-              <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.reporterEmail}</p>
+              <p className="mt-2 text-red-600 font-semibold flex items-center">
+                <AlertTriangle className="h-4 w-4 mr-1" />
+                {errors.reporterEmail}
+              </p>
             )}
           </div>
         </div>
 
         {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full bg-gradient-to-r from-ocean-500 to-cyan-500 hover:from-ocean-600 hover:to-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
-        >
-          {isSubmitting ? (
-            <div className="flex items-center justify-center space-x-2">
-              <div className="w-5 h-5 border-t-2 border-white rounded-full animate-spin" />
-              <span>Submitting Report...</span>
-            </div>
-          ) : (
-            <div className="flex items-center justify-center space-x-2">
-              <AlertTriangle className="h-5 w-5" />
-              <span>Submit Report</span>
-            </div>
-          )}
-        </button>
+        <div className="pt-6">
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full bg-gradient-to-r from-slate-800 via-blue-700 to-cyan-600 hover:from-slate-900 hover:via-blue-800 hover:to-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black py-6 px-8 rounded-2xl text-xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-3xl"
+          >
+            {isSubmitting ? (
+              <div className="flex items-center justify-center space-x-3">
+                <div className="w-6 h-6 border-t-3 border-white rounded-full animate-spin" />
+                <span>🌊 Submitting Your Coastal Report...</span>
+              </div>
+            ) : (
+              <div className="flex items-center justify-center space-x-3">
+                <AlertTriangle className="h-6 w-6" />
+                <span>🚨 Submit Coastal Activity Report</span>
+              </div>
+            )}
+          </button>
+        </div>
       </form>
     </div>
   );

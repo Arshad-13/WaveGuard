@@ -478,3 +478,155 @@ input[type="search"]::-webkit-search-cancel-button {
 .custom-gradient-1 {
   background-image: linear-gradient(145deg, #eef 0%, #fff8fc 100%);
 }
+
+/* Modern Solid Color Themes */
+.bg-ocean-light {
+  background-color: #f0fdff;
+  color: #0c4a6e;
+}
+
+.bg-ocean-50 {
+  background-color: #f0fdff;
+  color: #0c4a6e;
+}
+
+.bg-ocean-100 {
+  background-color: #ccf7fe;
+  color: #0e7490;
+}
+
+.bg-ocean-200 {
+  background-color: #99eefd;
+  color: #155e75;
+}
+
+.bg-ocean-300 {
+  background-color: #60ddfb;
+  color: #164e63;
+}
+
+.bg-ocean-primary {
+  background-color: #0891b2;
+  color: #ffffff;
+}
+
+.bg-ocean-600 {
+  background-color: #0e7490;
+  color: #ffffff;
+}
+
+.bg-ocean-700 {
+  background-color: #155e75;
+  color: #ffffff;
+}
+
+.bg-ocean-800 {
+  background-color: #164e63;
+  color: #ffffff;
+}
+
+.bg-ocean-dark {
+  background-color: #083344;
+  color: #cffafe;
+}
+
+/* Cyan Variants */
+.bg-cyan-light {
+  background-color: #ecfeff;
+  color: #0c4a6e;
+}
+
+.bg-cyan-medium {
+  background-color: #22d3ee;
+  color: #ffffff;
+}
+
+.bg-cyan-dark {
+  background-color: #0891b2;
+  color: #ffffff;
+}
+
+/* Teal Variants */
+.bg-teal-light {
+  background-color: #f0fdfa;
+  color: #134e4a;
+}
+
+.bg-teal-medium {
+  background-color: #14b8a6;
+  color: #ffffff;
+}
+
+.bg-teal-dark {
+  background-color: #0d9488;
+  color: #ffffff;
+}
+
+/* Primary Blue Variants */
+.bg-blue-light {
+  background-color: #e1e8ff;
+  color: #1e40af;
+}
+
+.bg-blue-medium {
+  background-color: #3c50e0;
+  color: #ffffff;
+}
+
+.bg-blue-dark {
+  background-color: #1c3fb7;
+  color: #ffffff;
+}
+
+/* Modern Theme Colors */
+.bg-modern-slate {
+  background-color: #64748b;
+  color: #ffffff;
+}
+
+.bg-modern-gray {
+  background-color: #6b7280;
+  color: #ffffff;
+}
+
+.bg-modern-neutral {
+  background-color: #525252;
+  color: #ffffff;
+}
+
+/* Accent Colors */
+.bg-accent-emerald {
+  background-color: #10b981;
+  color: #ffffff;
+}
+
+.bg-accent-purple {
+  background-color: #8b5cf6;
+  color: #ffffff;
+}
+
+.bg-accent-pink {
+  background-color: #ec4899;
+  color: #ffffff;
+}
+
+/* Interactive States */
+.bg-hover-transition {
+  transition: all 0.2s ease-in-out;
+}
+
+.bg-ocean-primary:hover {
+  background-color: #0e7490;
+}
+
+.bg-cyan-medium:hover {
+  background-color: #06b6d4;
+}
+
+.bg-teal-medium:hover {
+  background-color: #0f766e;
+}
+
+.bg-blue-medium:hover {
+  background-color: #1e40af;
+}

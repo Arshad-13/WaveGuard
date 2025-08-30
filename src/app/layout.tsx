@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { FloatingChatbot } from "@/components/layout/FloatingChatbot";
-import { ThemeProvider } from "@/components/theme/ThemeProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,15 +29,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} font-sans antialiased bg-white dark:bg-dark min-h-screen`}
+        className={`${inter.variable} font-sans antialiased bg-ocean-50 min-h-screen`}
       >
-        <ThemeProvider>
-          <Navbar />
-          <main className="pt-16">
-            {children}
-          </main>
-          <FloatingChatbot />
-        </ThemeProvider>
+        <Navbar />
+        <main className="pt-16">
+          {children}
+        </main>
+        <FloatingChatbot />
       </body>
     </html>
   );

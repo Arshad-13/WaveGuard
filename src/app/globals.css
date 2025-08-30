@@ -24,6 +24,53 @@ body {
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
+/* Modern Solid Color Body Backgrounds - add these classes to body or html element */
+body.bg-ocean-light {
+  background-color: #f0fdff;
+  color: #0c4a6e;
+}
+
+body.bg-ocean-primary {
+  background-color: #0891b2;
+  color: #ffffff;
+}
+
+body.bg-cyan-light {
+  background-color: #ecfeff;
+  color: #0c4a6e;
+}
+
+body.bg-modern-slate {
+  background-color: #64748b;
+  color: #ffffff;
+}
+
+body.bg-dark-ocean {
+  background-color: #083344;
+  color: #cffafe;
+}
+
+/* Professional theme combinations */
+body.theme-ocean-professional {
+  background-color: #f0fdff;
+  color: #0c4a6e;
+}
+
+body.theme-ocean-professional .bg-card {
+  background-color: #ffffff;
+  border: 1px solid #ccf7fe;
+}
+
+body.theme-dark-professional {
+  background-color: #111928;
+  color: #f9fafb;
+}
+
+body.theme-dark-professional .bg-card {
+  background-color: #1f2937;
+  border: 1px solid #374151;
+}
+
 /* Minimalistic scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -40,4 +87,54 @@ body {
 
 .dark ::-webkit-scrollbar-thumb {
   background: #374151;
+}
+
+/* Darker placeholder text for better visibility */
+::placeholder {
+  color: #6b7280 !important;
+  opacity: 1 !important;
+  font-weight: 500;
+}
+
+::-webkit-input-placeholder {
+  color: #6b7280 !important;
+  opacity: 1 !important;
+  font-weight: 500;
+}
+
+::-moz-placeholder {
+  color: #6b7280 !important;
+  opacity: 1 !important;
+  font-weight: 500;
+}
+
+:-ms-input-placeholder {
+  color: #6b7280 !important;
+  opacity: 1 !important;
+  font-weight: 500;
+}
+
+/* Even darker for textarea placeholders */
+textarea::placeholder {
+  color: #4b5563 !important;
+  opacity: 1 !important;
+  font-weight: 500;
+}
+
+textarea::-webkit-input-placeholder {
+  color: #4b5563 !important;
+  opacity: 1 !important;
+  font-weight: 500;
+}
+
+textarea::-moz-placeholder {
+  color: #4b5563 !important;
+  opacity: 1 !important;
+  font-weight: 500;
+}
+
+textarea:-ms-input-placeholder {
+  color: #4b5563 !important;
+  opacity: 1 !important;
+  font-weight: 500;
 }
