@@ -232,9 +232,9 @@ export function ReportForm() {
           </label>
           <div className="grid grid-cols-3 gap-4">
             {[
-              { value: 'low', label: 'Low Priority', color: 'green', bgColor: 'bg-green-50', borderColor: 'border-green-500', textColor: 'text-green-700' },
-              { value: 'medium', label: 'Medium Priority', color: 'yellow', bgColor: 'bg-yellow-50', borderColor: 'border-yellow-500', textColor: 'text-yellow-700' },
-              { value: 'high', label: 'High Priority', color: 'red', bgColor: 'bg-red-50', borderColor: 'border-red-500', textColor: 'text-red-700' }
+              { value: 'low' as const, label: 'Low Priority', color: 'green', bgColor: 'bg-green-50', borderColor: 'border-green-500', textColor: 'text-green-700' },
+              { value: 'medium' as const, label: 'Medium Priority', color: 'yellow', bgColor: 'bg-yellow-50', borderColor: 'border-yellow-500', textColor: 'text-yellow-700' },
+              { value: 'high' as const, label: 'High Priority', color: 'red', bgColor: 'bg-red-50', borderColor: 'border-red-500', textColor: 'text-red-700' }
             ].map((urgency) => (
               <button
                 key={urgency.value}

@@ -7,7 +7,9 @@ import {
   EarthquakeDataResponse,
   TsunamiAnalysisResponse,
   LocationInput,
-  UserRiskAssessment
+  UserRiskAssessment,
+  CycloneRiskInput,
+  CycloneAssessment
 } from '@/types/models';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_ML_API_URL || 'http://localhost:8000';
@@ -83,6 +85,30 @@ class ModelService {
       method: 'POST',
       body: JSON.stringify(input),
     });
+  }
+
+  // Cyclone risk assessment method (uses internal Next.js API)
+  async assessCycloneRisk(input: CycloneRiskInput): Promise<CycloneAssessment> {
+    try {
+      const response = await fetch('/api/assess/cyclone-risk', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(input),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Cyclone API Error: ${response.status} ${response.statusText}`);
+      }
+
+      return response.json();
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to assess cyclone risk: ${error.message}`);
+      }
+      throw new Error('Failed to assess cyclone risk');
+    }
   }
 
   async getUSGSEarthquakeData(feedType: string): Promise<EarthquakeDataResponse> {

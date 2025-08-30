@@ -81,11 +81,11 @@ const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
 
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
-      if (!dropdownRef.current) return;
+      if (!dropdownRef.current || !target) return;
       if (
         !show ||
-        dropdownRef.current.contains(target) ||
-        trigger.current.contains(target)
+        dropdownRef.current.contains(target as Node) ||
+        (trigger.current && trigger.current.contains(target as Node))
       )
         return;
       setShow(false);

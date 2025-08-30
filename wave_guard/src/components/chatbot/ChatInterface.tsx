@@ -47,11 +47,23 @@ interface FirebaseMessage {
 
 // Convert Firebase message format to ChatInterface format
 const convertFirebaseMessage = (msg: FirebaseMessage): Message => {
+  let timestamp: Date;
+  
+  if (typeof msg.timestamp === 'string') {
+    timestamp = new Date(msg.timestamp);
+  } else if (msg.timestamp instanceof Date) {
+    timestamp = msg.timestamp;
+  } else if (msg.timestamp && typeof msg.timestamp === 'object' && 'toDate' in msg.timestamp) {
+    timestamp = msg.timestamp.toDate();
+  } else {
+    timestamp = new Date();
+  }
+  
   return {
     id: msg.id || Date.now().toString(),
     type: msg.role === 'user' ? 'user' : 'assistant',
     content: msg.content,
-    timestamp: msg.timestamp?.toDate ? msg.timestamp.toDate() : new Date(msg.timestamp)
+    timestamp
   };
 };
 

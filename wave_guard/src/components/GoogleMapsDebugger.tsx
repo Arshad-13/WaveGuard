@@ -62,7 +62,7 @@ const GoogleMapsDebugger: React.FC = () => {
         test: 'Network Connectivity',
         status: 'fail',
         message: 'Cannot reach Google Maps API',
-        details: { error: error.message }
+        details: { error: error instanceof Error ? error.message : 'Unknown error' }
       });
     }
 
@@ -120,7 +120,7 @@ const GoogleMapsDebugger: React.FC = () => {
         test: 'Google Maps Script Loading',
         status: 'fail',
         message: 'Failed to load Google Maps API',
-        details: { error: error.message }
+        details: { error: error instanceof Error ? error.message : 'Unknown error' }
       });
     }
 
