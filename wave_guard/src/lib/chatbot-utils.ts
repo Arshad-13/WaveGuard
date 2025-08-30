@@ -40,6 +40,6 @@ export async function getMessagesFromFirestore(userId: string): Promise<Message[
   const ref = collection(db, "chatbot", userId, "messages");
   const q = query(ref, orderBy("timestamp", "asc"));
   const snap = await getDocs(q);
-  return snap.docs.map((doc) => doc.data());
+  return snap.docs.map((doc) => doc.data() as Message);
 }
 

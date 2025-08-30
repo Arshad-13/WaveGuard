@@ -1,14 +1,9 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Waves, AlertCircle, Info, Zap } from 'lucide-react';
+import { Send, Bot, User, AlertCircle, Info, Zap } from 'lucide-react';
 import { clsx } from 'clsx';
-import {
-  saveMessageToFirestore,
-  getMessagesFromFirestore,
-} from "@/lib/chatbot-utils";
 import { chatWithGemini } from "@/lib/chatbot";
-import { marked } from "marked";
 
 interface Message {
   id: string;
@@ -43,16 +38,15 @@ const callMLModel = async (input: string): Promise<string> => {
   }
 };
 
-interface Message {
-  id: string;
-  type: 'user' | 'assistant';
+interface FirebaseMessage {
+  id?: string;
+  role: 'user' | 'assistant';
   content: string;
-  timestamp: Date;
-  suggestions?: string[];
+  timestamp: { toDate(): Date } | Date | string;
 }
 
 // Convert Firebase message format to ChatInterface format
-const convertFirebaseMessage = (msg: any): Message => {
+const convertFirebaseMessage = (msg: FirebaseMessage): Message => {
   return {
     id: msg.id || Date.now().toString(),
     type: msg.role === 'user' ? 'user' : 'assistant',

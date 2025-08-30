@@ -72,7 +72,7 @@ export default function TsunamiRiskDemoPage() {
                 </label>
                 <select
                   value={feedType}
-                  onChange={(e) => setFeedType(e.target.value as any)}
+                  onChange={(e) => setFeedType(e.target.value as typeof feedType)}
                   className="w-full p-2 border border-gray-300 rounded-md text-sm"
                 >
                   <option value="past_hour_m45">Past Hour - Magnitude 4.5+</option>
@@ -166,8 +166,8 @@ export default function TsunamiRiskDemoPage() {
 
           <div className="mt-4 p-3 bg-blue-50 rounded border border-blue-200">
             <p className="text-sm text-blue-800">
-              <strong>💡 Testing Tip:</strong> Try the "Past Hour - Magnitude 4.5+" feed to see the "no earthquake" scenario, 
-              or use "Past Day - All Earthquakes" to see more earthquake data and risk assessments.
+              <strong>💡 Testing Tip:</strong> Try the &quot;Past Hour - Magnitude 4.5+&quot; feed to see the &quot;no earthquake&quot; scenario, 
+              or use &quot;Past Day - All Earthquakes&quot; to see more earthquake data and risk assessments.
             </p>
           </div>
         </div>

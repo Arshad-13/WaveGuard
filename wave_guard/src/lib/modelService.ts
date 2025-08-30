@@ -6,11 +6,8 @@ import {
   EarthquakeDataRequest,
   EarthquakeDataResponse,
   TsunamiAnalysisResponse,
-  UserLocationInput,
-  UserRiskAssessment,
-  USGSEarthquakeResponse,
-  CycloneRiskInput,
-  CycloneAssessment
+  LocationInput,
+  UserRiskAssessment
 } from '@/types/models';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_ML_API_URL || 'http://localhost:8000';
@@ -81,25 +78,16 @@ class ModelService {
   }
 
   // New USGS integration methods
-  async assessTsunamiRisk(input: UserLocationInput): Promise<UserRiskAssessment> {
+  async assessTsunamiRisk(input: LocationInput): Promise<UserRiskAssessment> {
     return this.fetchAPI<UserRiskAssessment>('/assess/tsunami-risk', {
       method: 'POST',
       body: JSON.stringify(input),
     });
   }
 
-  async getUSGSEarthquakeData(feedType: string): Promise<USGSEarthquakeResponse> {
-    return this.fetchAPI<USGSEarthquakeResponse>(`/earthquakes/${feedType}`);
+  async getUSGSEarthquakeData(feedType: string): Promise<EarthquakeDataResponse> {
+    return this.fetchAPI<EarthquakeDataResponse>(`/earthquakes/${feedType}`);
   }
-
-  // Cyclone risk assessment method
-  async assessCycloneRisk(input: CycloneRiskInput): Promise<CycloneAssessment> {
-    return this.fetchAPI<CycloneAssessment>('/assess/cyclone-risk', {
-      method: 'POST',
-      body: JSON.stringify(input),
-    });
-  }
-
   async checkConnection(): Promise<boolean> {
     try {
       await this.fetchAPI('/');

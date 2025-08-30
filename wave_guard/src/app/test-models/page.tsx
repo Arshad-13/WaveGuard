@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import { useModels } from '@/hooks/useModels';
+import { PredictionResponse } from '@/types/models';
 
 export default function ModelTestPage() {
   const { isConnected, modelStatus, loading, error, predictTsunami, checkConnection } = useModels();
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<PredictionResponse | null>(null);
 
   const testTsunamiPrediction = async () => {
     const testData = {

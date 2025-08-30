@@ -304,11 +304,11 @@ const LocationMap: React.FC<LocationMapProps> = ({
         <p><strong>Instructions:</strong></p>
         <ul className="list-disc list-inside space-y-1">
           <li>Use the search box to find a location by name (currently for display only)</li>
-          <li>Enter latitude and longitude manually and click "Set Location"</li>
-          <li>Click "Get Current Location" to use your GPS coordinates</li>
+          <li>Enter latitude and longitude manually and click &quot;Set Location&quot;</li>
+          <li>Click &quot;Get Current Location&quot; to use your GPS coordinates</li>
           <li>Click anywhere on the map to select a new location</li>
           <li>The map will display your selected location with a marker and popup</li>
-          <li>Click "Send to Backend" to submit the coordinates to your server</li>
+          <li>Click &quot;Send to Backend&quot; to submit the coordinates to your server</li>
         </ul>
       </div>
     </div>
