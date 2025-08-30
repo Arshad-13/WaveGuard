@@ -1,0 +1,24 @@
+# Core FastAPI and server dependencies
+fastapi==0.115.6
+uvicorn[standard]==0.32.1
+pydantic==2.10.4
+python-multipart==0.0.19
+
+# Data processing and ML
+pandas==2.2.3
+numpy==1.26.4
+scikit-learn==1.6.0
+
+# Security and authentication (optional)
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+
+# Development and testing
+pytest==8.3.4
+httpx==0.28.1
+
+# Environment management
+python-dotenv==1.0.1
+
+# Logging and monitoring
+loguru==0.7.3
