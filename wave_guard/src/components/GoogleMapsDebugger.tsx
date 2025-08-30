@@ -6,7 +6,7 @@ interface DiagnosticResult {
   test: string;
   status: 'pass' | 'fail' | 'warning';
   message: string;
-  details?: any;
+  details?: Record<string, unknown>;
 }
 
 const GoogleMapsDebugger: React.FC = () => {

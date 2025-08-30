@@ -16,8 +16,8 @@ const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
   const [options, setOptions] = useState<Option[]>([]);
   const [selected, setSelected] = useState<number[]>([]);
   const [show, setShow] = useState(false);
-  const dropdownRef = useRef<any>(null);
-  const trigger = useRef<any>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const loadOptions = () => {
