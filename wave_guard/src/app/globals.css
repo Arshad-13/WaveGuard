@@ -12,12 +12,6 @@
   --font-sans: var(--font-inter);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #111928;
-    --foreground: #f9fafb;
-  }
-}
 
 body {
   background: var(--background);
@@ -46,10 +40,6 @@ body.bg-modern-slate {
   color: #ffffff;
 }
 
-body.bg-dark-ocean {
-  background-color: #083344;
-  color: #cffafe;
-}
 
 /* Professional theme combinations */
 body.theme-ocean-professional {
@@ -62,15 +52,6 @@ body.theme-ocean-professional .bg-card {
   border: 1px solid #ccf7fe;
 }
 
-body.theme-dark-professional {
-  background-color: #111928;
-  color: #f9fafb;
-}
-
-body.theme-dark-professional .bg-card {
-  background-color: #1f2937;
-  border: 1px solid #374151;
-}
 
 /* Minimalistic scrollbar */
 ::-webkit-scrollbar {
@@ -86,9 +67,6 @@ body.theme-dark-professional .bg-card {
   border-radius: 3px;
 }
 
-.dark ::-webkit-scrollbar-thumb {
-  background: #374151;
-}
 
 /* Darker placeholder text for better visibility */
 ::placeholder {

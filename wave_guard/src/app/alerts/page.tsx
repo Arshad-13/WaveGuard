@@ -201,14 +201,6 @@ export default function AlertsPage() {
             </div>
             <div className="flex space-x-3">
               <button className="flex items-center px-4 py-2 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
-                <Download className="w-4 h-4 mr-2" />
-                Export
-              </button>
-              <button className="flex items-center px-4 py-2 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
-                <Settings className="w-4 h-4 mr-2" />
-                Settings
-              </button>
-              <button className="flex items-center px-4 py-2 bg-ocean-600 text-white rounded-lg hover:bg-ocean-700 transition-colors">
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Refresh
               </button>

@@ -18,7 +18,7 @@ export const NAV_DATA = [
       },
       {
         title: "Threat Map",
-        url: "/map",
+        url: "/location",
         icon: Icons.MapPin,
         items: [],
       },
