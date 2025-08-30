@@ -14,6 +14,8 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { useRouter } from "next/navigation";
+import twilio from 'twilio';
+
 
 export default function NoticeBoard() {
   const { user } = useAuth();
@@ -22,8 +24,27 @@ export default function NoticeBoard() {
   const [noticeInput, setNoticeInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [notices, setNotices] = useState<any[]>([]);
+  
 
   const router = useRouter();
+
+  useEffect(() => {
+    const accountSid = process.env.NEXT_PUBLIC_TWILIO_ACCOUNT_SID;
+    const authToken = process.env.NEXT_PUBLIC_TWILIO_AUTH_TOKEN;
+    const client = twilio(accountSid, authToken);
+
+    async function createMessage() {
+    const message = await client.messages.create({
+        body: "This is the ship that made the Kessel Run in fourteen parsecs?",
+        from: "+919328788481",
+        to: "+919714110365",
+    });
+
+        console.log(message.body);
+        }
+
+        createMessage();
+  }, [])
 
   // Fetch user details (role + region)
   useEffect(() => {
