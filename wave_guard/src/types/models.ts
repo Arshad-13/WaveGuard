@@ -26,3 +26,142 @@ export interface ModelStatus {
   available_models: string[];
   note?: string;
 }
+
+// Types for earthquake and tsunami analysis
+export interface LocationInput {
+  lat: number;
+  lng: number;
+  address?: string;
+}
+
+export interface EarthquakeDataRequest {
+  latitude: number;
+  longitude: number;
+  address?: string;
+  radius_km?: number;
+  time_period?: string;
+}
+
+export interface EarthquakeFeature {
+  id: string;
+  magnitude?: number;
+  place: string;
+  time: string;
+  longitude?: number;
+  latitude?: number;
+  depth?: number;
+  magType: string;
+  tsunami: number;
+  url: string;
+  distance_km?: number;
+}
+
+export interface EarthquakeDataResponse {
+  location: LocationInput;
+  search_radius_km: number;
+  time_period: string;
+  earthquakes_found: number;
+  nearby_earthquakes: EarthquakeFeature[];
+  risk_analysis: {
+    risk_level: string;
+    risk_score: number;
+    max_magnitude: number;
+    avg_magnitude: number;
+    total_earthquakes: number;
+    shallow_earthquakes: number;
+    tsunami_alerts: number;
+    analysis: string;
+    recommendations: string[];
+    tsunami_predictions?: TsunamiPredictionResult[];
+  };
+  data_source: string;
+  timestamp: string;
+}
+
+export interface TsunamiPredictionResult {
+  earthquake_id: string;
+  earthquake_data: {
+    magnitude: number;
+    depth: number;
+    location: string;
+    place: string;
+    time: string;
+    distance_km?: number;
+  };
+  tsunami_prediction: {
+    prediction: boolean;
+    probability?: number;
+    confidence?: number;
+    risk_level: string;
+    model_assessment: TsunamiRiskAssessment;
+  };
+}
+
+export interface TsunamiRiskAssessment {
+  magnitude_factor: string;
+  depth_factor: string;
+  geographic_factor: string;
+  overall_assessment: string;
+  key_factors: string[];
+  geological_context: GeologicalFeatures;
+}
+
+export interface GeologicalFeatures {
+  is_oceanic: boolean;
+  coastal_proximity_km: number;
+  estimated_depth_km: number;
+  nearest_risk_zone: string;
+  distance_to_risk_zone_km?: number;
+  geological_risk_factor: number;
+  seismic_zone: string;
+  tectonic_activity_level: string;
+}
+
+export interface TsunamiAnalysisResponse {
+  location: {
+    latitude: number;
+    longitude: number;
+    address?: string;
+  };
+  geological_context: GeologicalFeatures;
+  recent_earthquake_analysis: {
+    earthquakes_found: number;
+    risk_analysis: any;
+    search_radius_km: number;
+    time_period: string;
+  };
+  scenario_analysis: {
+    scenarios_analyzed: number;
+    predictions: ScenarioPrediction[];
+  };
+  overall_tsunami_threat: ThreatAssessment;
+  recommendations: SafetyRecommendations;
+  data_sources: string[];
+  timestamp: string;
+}
+
+export interface ScenarioPrediction {
+  scenario: string;
+  magnitude: number;
+  depth: number;
+  tsunami_prediction: boolean;
+  tsunami_probability?: number;
+  confidence?: number;
+  risk_level: string;
+  scenario_probability: number;
+}
+
+export interface ThreatAssessment {
+  threat_level: string;
+  alert_status: string;
+  threat_score: number;
+  contributing_factors: string[];
+  assessment_summary: string;
+}
+
+export interface SafetyRecommendations {
+  immediate_actions: string[];
+  preparedness: string[];
+  monitoring: string[];
+  evacuation: string[];
+}
