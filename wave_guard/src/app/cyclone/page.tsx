@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
-import { UserRiskAssessment } from '@/types/models';
-import RiskAssessmentDisplay from '@/components/RiskAssessmentDisplay';
+import { CycloneAssessment } from '@/types/models';
+import CycloneAssessmentDisplay from '@/components/CycloneAssessmentDisplay';
 
 interface LocationData {
   lat: number;
@@ -12,43 +12,43 @@ interface LocationData {
 }
 
 // Dynamically import map components to avoid SSR issues
-const TsunamiRiskMap = dynamic(() => import('@/components/TsunamiRiskMap'), {
+const CycloneRiskMap = dynamic(() => import('@/components/CycloneRiskMap'), {
   ssr: false,
   loading: () => <div className="h-96 bg-gray-200 animate-pulse rounded-lg flex items-center justify-center">Loading map...</div>
 });
 
-export default function LocationPage() {
+export default function CyclonePage() {
   const [selectedLocation, setSelectedLocation] = useState<LocationData | null>(null);
-  const [riskAssessment, setRiskAssessment] = useState<UserRiskAssessment | null>(null);
+  const [riskAssessment, setRiskAssessment] = useState<CycloneAssessment | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [feedType, setFeedType] = useState<'past_hour_m45' | 'past_day_m45' | 'past_hour_m25' | 'past_day_all' | 'past_week_m45' | 'past_month_m45'>('past_day_m45');
 
   const handleLocationSelect = (location: LocationData) => {
-    console.log('🎯 [LocationPage] Location selected:', {
+    console.log('🎯 [CyclonePage] Location selected:', {
       ...location,
       timestamp: new Date().toISOString(),
-      source: 'TsunamiRiskMap component'
+      source: 'CycloneRiskMap component'
     });
     setSelectedLocation(location);
     setError(null);
   };
 
-  const handleRiskAssessment = (assessment: UserRiskAssessment | null) => {
+  const handleRiskAssessment = (assessment: CycloneAssessment | null) => {
     setRiskAssessment(assessment);
     setLoading(false);
     if (!assessment) {
-      setError('Failed to assess tsunami risk');
+      setError('Failed to assess cyclone risk');
     }
   };
 
-  // Preset locations for quick testing
+  // Preset locations for quick testing (cyclone-prone areas)
   const presetLocations = [
-    { name: 'Tokyo, Japan', lat: 35.6762, lng: 139.6503 },
-    { name: 'San Francisco, USA', lat: 37.7749, lng: -122.4194 },
+    { name: 'Mumbai, India', lat: 19.0760, lng: 72.8777 },
+    { name: 'Dhaka, Bangladesh', lat: 23.8103, lng: 90.4125 },
+    { name: 'Miami, USA', lat: 25.7617, lng: -80.1918 },
     { name: 'Manila, Philippines', lat: 14.5995, lng: 120.9842 },
-    { name: 'Jakarta, Indonesia', lat: -6.2088, lng: 106.8456 },
-    { name: 'Sydney, Australia', lat: -33.8688, lng: 151.2093 },
+    { name: 'Cairns, Australia', lat: -16.9186, lng: 145.7781 },
+    { name: 'New Orleans, USA', lat: 29.9511, lng: -90.0715 },
   ];
 
   return (
@@ -57,10 +57,10 @@ export default function LocationPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            🌊 WaveGuard Real-Time Tsunami Risk Assessment
+            🌪️ WaveGuard Real-Time Cyclone Risk Assessment
           </h1>
           <p className="text-lg text-gray-600">
-            Click anywhere on the map to get real-time tsunami risk assessment based on recent USGS earthquake data
+            Click anywhere on the map to get real-time cyclone risk assessment based on current weather conditions
           </p>
         </div>
 
@@ -70,27 +70,23 @@ export default function LocationPage() {
             <h3 className="text-lg font-bold text-gray-800 mb-4">🔧 Assessment Settings</h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Feed type selector */}
+              {/* Information about the system */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Earthquake Data Source:
+                  Weather Data Source:
                 </label>
-                <select
-                  value={feedType}
-                  onChange={(e) => setFeedType(e.target.value as any)}
-                  className="w-full p-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="past_hour_m45">🕐 Past Hour - Magnitude 4.5+</option>
-                  <option value="past_day_m45">📅 Past Day - Magnitude 4.5+</option>
-                  <option value="past_hour_m25">🕐 Past Hour - Magnitude 2.5+</option>
-                  <option value="past_day_all">📅 Past Day - All Earthquakes</option>
-                  <option value="past_week_m45">📊 Past Week - Magnitude 4.5+</option>
-                  <option value="past_month_m45">🗓️ Past Month - Magnitude 4.5+</option>
-                </select>
-                <p className="text-xs text-gray-500 mt-1">
-                  {feedType === 'past_hour_m45' && 'Often shows "no earthquakes" scenario for testing'}
-                  {feedType === 'past_day_all' && 'Shows the most earthquake data for comprehensive analysis'}
-                  {feedType === 'past_day_m45' && 'Balanced feed showing significant earthquakes'}
+                <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-blue-600">🌤️</span>
+                    <div>
+                      <div className="font-medium text-blue-800">OpenWeatherMap API</div>
+                      <div className="text-sm text-blue-600">Live atmospheric pressure and wind speed data</div>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  The system fetches real-time weather data including atmospheric pressure and wind speed, 
+                  then uses machine learning to predict cyclone formation risk.
                 </p>
               </div>
 
@@ -106,7 +102,7 @@ export default function LocationPage() {
                       onClick={() => handleLocationSelect(preset)}
                       className="px-3 py-2 text-xs bg-blue-100 text-blue-800 rounded hover:bg-blue-200 transition-colors text-left"
                     >
-                      📍 {preset.name}
+                      🌪️ {preset.name}
                     </button>
                   ))}
                 </div>
@@ -129,19 +125,18 @@ export default function LocationPage() {
           <div className="xl:col-span-2 bg-white rounded-lg border border-gray-200 shadow-sm">
             <div className="p-4 border-b border-gray-200">
               <h2 className="text-lg font-bold text-gray-800">
-                🗺️ Interactive Tsunami Risk Map
+                🗺️ Interactive Cyclone Risk Map
               </h2>
               <p className="text-sm text-gray-600 mt-1">
-                Click anywhere to assess tsunami risk • Real earthquakes shown as markers
+                Click anywhere to assess cyclone risk • Weather data from OpenWeatherMap
               </p>
             </div>
             <div className="p-4">
               <div className="h-[600px]">
-                <TsunamiRiskMap
+                <CycloneRiskMap
                   selectedLocation={selectedLocation}
                   onLocationSelect={handleLocationSelect}
                   onRiskAssessment={handleRiskAssessment}
-                  feedType={feedType}
                   height="100%"
                   autoAssess={true}
                 />
@@ -153,14 +148,14 @@ export default function LocationPage() {
           <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
             <div className="p-4 border-b border-gray-200">
               <h2 className="text-lg font-bold text-gray-800">
-                📊 Risk Assessment
+                🌪️ Risk Assessment
               </h2>
               <p className="text-sm text-gray-600 mt-1">
-                Live analysis based on USGS earthquake data
+                Live analysis based on current weather conditions
               </p>
             </div>
             <div className="p-4 max-h-[600px] overflow-y-auto">
-              <RiskAssessmentDisplay
+              <CycloneAssessmentDisplay
                 assessment={riskAssessment}
                 loading={loading}
                 error={error}
@@ -172,15 +167,15 @@ export default function LocationPage() {
         {/* How it works */}
         <div className="mt-8 bg-white rounded-lg border border-gray-200 shadow-sm p-6">
           <h2 className="text-xl font-bold text-gray-800 mb-4">
-            ⚙️ How Real-Time Assessment Works
+            ⚙️ How Cyclone Risk Assessment Works
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
-              <div className="text-3xl mb-2">🌍</div>
-              <h3 className="font-bold text-gray-700 mb-2">1. Live USGS Data</h3>
+              <div className="text-3xl mb-2">🌤️</div>
+              <h3 className="font-bold text-gray-700 mb-2">1. Live Weather Data</h3>
               <p className="text-sm text-gray-600">
-                Fetches real-time earthquake data from USGS feeds covering different time ranges and magnitudes.
+                Fetches real-time atmospheric pressure and wind speed data from OpenWeatherMap API for the selected location.
               </p>
             </div>
             
@@ -188,35 +183,39 @@ export default function LocationPage() {
               <div className="text-3xl mb-2">🤖</div>
               <h3 className="font-bold text-gray-700 mb-2">2. ML Prediction</h3>
               <p className="text-sm text-gray-600">
-                Your trained tsunami prediction model analyzes each earthquake for tsunami potential.
+                Your trained cyclone prediction model analyzes pressure and wind patterns to determine formation risk.
               </p>
             </div>
             
             <div className="text-center">
               <div className="text-3xl mb-2">📏</div>
-              <h3 className="font-bold text-gray-700 mb-2">3. Distance-Based Risk</h3>
+              <h3 className="font-bold text-gray-700 mb-2">3. Risk Classification</h3>
               <p className="text-sm text-gray-600">
-                Calculates your risk level based on distance from tsunami-generating earthquakes.
+                Provides risk level and predicted wind speed with actionable safety recommendations.
               </p>
             </div>
           </div>
 
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-5 gap-4 text-sm">
+            <div className="p-3 bg-purple-50 rounded border border-purple-200">
+              <div className="font-bold text-purple-800">🌪️ Extreme Risk</div>
+              <div className="text-purple-700">Hurricane/Typhoon conditions likely</div>
+            </div>
             <div className="p-3 bg-red-50 rounded border border-red-200">
               <div className="font-bold text-red-800">🚨 High Risk</div>
-              <div className="text-red-700">≤100km from tsunami earthquake</div>
+              <div className="text-red-700">Severe tropical storm expected</div>
             </div>
             <div className="p-3 bg-orange-50 rounded border border-orange-200">
-              <div className="font-bold text-orange-800">⚠️ Medium Risk</div>
-              <div className="text-orange-700">≤500km with moderate threat</div>
+              <div className="font-bold text-orange-800">⚠️ Moderate Risk</div>
+              <div className="text-orange-700">Tropical storm conditions</div>
             </div>
             <div className="p-3 bg-yellow-50 rounded border border-yellow-200">
               <div className="font-bold text-yellow-800">📋 Low Risk</div>
-              <div className="text-yellow-700">≤1000km with low threat</div>
+              <div className="text-yellow-700">Unstable weather patterns</div>
             </div>
             <div className="p-3 bg-green-50 rounded border border-green-200">
               <div className="font-bold text-green-800">✅ No Risk</div>
-              <div className="text-green-700">Far from threats or no earthquakes</div>
+              <div className="text-green-700">Stable atmospheric conditions</div>
             </div>
           </div>
         </div>
@@ -225,20 +224,20 @@ export default function LocationPage() {
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
             <div className="text-4xl mb-4">🔄</div>
-            <h3 className="text-lg font-semibold mb-2">Real-Time Data</h3>
-            <p className="text-gray-600">Live earthquake feeds updated automatically from USGS sensors worldwide.</p>
+            <h3 className="text-lg font-semibold mb-2">Real-Time Weather Data</h3>
+            <p className="text-gray-600">Live atmospheric pressure and wind speed updates from OpenWeatherMap's global network.</p>
           </div>
           
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
             <div className="text-4xl mb-4">🎯</div>
-            <h3 className="text-lg font-semibold mb-2">Precision Assessment</h3>
-            <p className="text-gray-600">Location-specific risk analysis based on actual distance from earthquake epicenters.</p>
+            <h3 className="text-lg font-semibold mb-2">ML-Powered Prediction</h3>
+            <p className="text-gray-600">Advanced machine learning model trained on historical cyclone formation patterns.</p>
           </div>
           
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
             <div className="text-4xl mb-4">🛡️</div>
-            <h3 className="text-lg font-semibold mb-2">Actionable Insights</h3>
-            <p className="text-gray-600">Clear risk levels and specific recommendations based on current threat assessment.</p>
+            <h3 className="text-lg font-semibold mb-2">Actionable Alerts</h3>
+            <p className="text-gray-600">Clear risk levels with specific safety recommendations and monitoring guidance.</p>
           </div>
         </div>
 
@@ -248,14 +247,23 @@ export default function LocationPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
               <div className="font-medium text-gray-700">Main Endpoint:</div>
-              <code className="bg-gray-200 px-2 py-1 rounded">POST /assess/tsunami-risk</code>
-              <div className="text-gray-600 mt-1">Comprehensive risk assessment with live USGS data</div>
+              <code className="bg-gray-200 px-2 py-1 rounded">POST /assess/cyclone-risk</code>
+              <div className="text-gray-600 mt-1">Comprehensive cyclone risk assessment with live weather data</div>
             </div>
             <div>
               <div className="font-medium text-gray-700">Data Source:</div>
-              <code className="bg-gray-200 px-2 py-1 rounded">GET /earthquakes/{feedType}</code>
-              <div className="text-gray-600 mt-1">Raw USGS earthquake data in GeoJSON format</div>
+              <code className="bg-gray-200 px-2 py-1 rounded">OpenWeatherMap Current Weather API</code>
+              <div className="text-gray-600 mt-1">Real-time atmospheric pressure and wind speed data</div>
             </div>
+          </div>
+          
+          <div className="mt-4 p-4 bg-white rounded border">
+            <h4 className="font-medium text-gray-800 mb-2">Key Weather Parameters:</h4>
+            <ul className="text-sm text-gray-600 space-y-1">
+              <li><strong>Atmospheric Pressure:</strong> Critical indicator for cyclone formation (low pressure systems)</li>
+              <li><strong>Wind Speed:</strong> Current wind conditions and patterns affecting development</li>
+              <li><strong>Additional Factors:</strong> Temperature, humidity, and visibility for comprehensive analysis</li>
+            </ul>
           </div>
         </div>
       </div>

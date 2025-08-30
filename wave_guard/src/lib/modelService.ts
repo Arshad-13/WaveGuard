@@ -8,7 +8,9 @@ import {
   TsunamiAnalysisResponse,
   UserLocationInput,
   UserRiskAssessment,
-  USGSEarthquakeResponse
+  USGSEarthquakeResponse,
+  CycloneRiskInput,
+  CycloneAssessment
 } from '@/types/models';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_ML_API_URL || 'http://localhost:8000';
@@ -88,6 +90,14 @@ class ModelService {
 
   async getUSGSEarthquakeData(feedType: string): Promise<USGSEarthquakeResponse> {
     return this.fetchAPI<USGSEarthquakeResponse>(`/earthquakes/${feedType}`);
+  }
+
+  // Cyclone risk assessment method
+  async assessCycloneRisk(input: CycloneRiskInput): Promise<CycloneAssessment> {
+    return this.fetchAPI<CycloneAssessment>('/assess/cyclone-risk', {
+      method: 'POST',
+      body: JSON.stringify(input),
+    });
   }
 
   async checkConnection(): Promise<boolean> {

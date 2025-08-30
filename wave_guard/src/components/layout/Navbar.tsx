@@ -3,10 +3,12 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Waves, Shield, AlertTriangle } from 'lucide-react';
+import { Menu, X, Waves, Shield, AlertTriangle, MapPin, Wind } from 'lucide-react';
 import { clsx } from 'clsx';
 
 const navigation = [
+  { name: 'Tsunami Risk', href: '/location', icon: Waves },
+  { name: 'Cyclone Risk', href: '/cyclone', icon: Wind },
   { name: 'Chatbot', href: '/chatbot', icon: Shield },
   { name: 'Report', href: '/report', icon: AlertTriangle },
   { name: 'Alerts', href: '/alerts', icon: Shield },
