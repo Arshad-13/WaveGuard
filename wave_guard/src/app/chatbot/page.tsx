@@ -1,4 +1,5 @@
 import { ChatInterface } from '@/components/chatbot/ChatInterface';
+<<<<<<< HEAD
 import { Bot, Shield, Zap, Brain, MessageCircle } from 'lucide-react';
 
 export default function ChatbotPage() {
@@ -117,6 +118,24 @@ export default function ChatbotPage() {
             <div className="text-blue-200 font-medium">Accuracy Rate</div>
           </div>
         </div>
+=======
+
+export default function ChatbotPage() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-100 to-blue-50 dark:from-dark-2 dark:to-dark">
+      <div className="container mx-auto px-6 py-12">
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            AI Coastal Assistant
+          </h1>
+          <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            Ask questions about coastal threats, get real-time updates, and receive expert guidance 
+            on marine safety and emergency preparedness.
+          </p>
+        </div>
+        
+        <ChatInterface />
+>>>>>>> 5f8976cee110c60c9d557fa9c339a4a69499900a
       </div>
     </div>
   );
