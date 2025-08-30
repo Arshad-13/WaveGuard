@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
+import dynamic from 'next/dynamic';
 
 interface LocationData {
   lat: number;
@@ -14,6 +15,20 @@ interface LocationMapProps {
   width?: string;
 }
 
+// Create a complete map component that's dynamically imported
+const DynamicMap = dynamic(() => import('./LeafletMap'), {
+  ssr: false,
+  loading: () => (
+    <div className="flex items-center justify-center h-full bg-gray-50 rounded-lg border border-gray-300">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <p className="text-gray-600">Loading Map...</p>
+      </div>
+    </div>
+  ),
+});
+
+
 const LocationMap: React.FC<LocationMapProps> = ({ 
   onLocationSelect, 
   height = '500px', 
@@ -24,6 +39,20 @@ const LocationMap: React.FC<LocationMapProps> = ({
   const [manualLat, setManualLat] = useState<string>('');
   const [manualLng, setManualLng] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [isClient, setIsClient] = useState(false);
+
+  // Ensure we're on the client side
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Handle location selection from map or manual input
+  const handleLocationSelect = useCallback((location: LocationData) => {
+    setSelectedLocation(location);
+    onLocationSelect(location);
+    setManualLat(location.lat.toString());
+    setManualLng(location.lng.toString());
+  }, [onLocationSelect]);
 
   // Handle manual coordinate input
   const handleManualCoordinates = useCallback(() => {
@@ -47,11 +76,10 @@ const LocationMap: React.FC<LocationMapProps> = ({
       lng: parseFloat(lng.toFixed(6)),
     };
 
-    setSelectedLocation(locationData);
-    onLocationSelect(locationData);
+    handleLocationSelect(locationData);
     setLocationStatus('Manual coordinates set!');
     setTimeout(() => setLocationStatus(''), 3000);
-  }, [manualLat, manualLng, onLocationSelect]);
+  }, [manualLat, manualLng, handleLocationSelect]);
 
   // Handle search location
   const handleSearchLocation = useCallback(() => {
@@ -87,11 +115,7 @@ const LocationMap: React.FC<LocationMapProps> = ({
           lng: parseFloat(lng.toFixed(6)),
         };
         
-        setSelectedLocation(locationData);
-        onLocationSelect(locationData);
-        setManualLat(lat.toFixed(6));
-        setManualLng(lng.toFixed(6));
-        
+        handleLocationSelect(locationData);
         setLocationStatus('Current location found!');
         setTimeout(() => setLocationStatus(''), 3000);
       },
@@ -122,7 +146,7 @@ const LocationMap: React.FC<LocationMapProps> = ({
         maximumAge: 60000,
       }
     );
-  }, [onLocationSelect]);
+  }, [handleLocationSelect]);
 
   // Send location to backend
   const sendLocationToBackend = useCallback(async () => {
@@ -156,17 +180,19 @@ const LocationMap: React.FC<LocationMapProps> = ({
     setTimeout(() => setLocationStatus(''), 3000);
   }, [selectedLocation]);
 
-  // Generate map URLs for selected location
-  const generateMapUrl = (location: LocationData) => {
-    const { lat, lng } = location;
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '';
-    
-    if (apiKey) {
-      return `https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${lat},${lng}&zoom=15`;
-    } else {
-      return `https://www.google.com/maps?q=${lat},${lng}&t=m&z=15&output=embed&iwloc=near`;
-    }
-  };
+  // Don't render on server side
+  if (!isClient) {
+    return (
+      <div className="w-full" style={{ height, width }}>
+        <div className="flex items-center justify-center h-full bg-gray-50 rounded-lg border border-gray-300">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading Map...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
@@ -262,29 +288,14 @@ const LocationMap: React.FC<LocationMapProps> = ({
       </div>
 
       {/* Map Container */}
-      <div className="rounded-lg border border-gray-300 shadow-lg overflow-hidden">
-        {selectedLocation ? (
-          <iframe
-            src={generateMapUrl(selectedLocation)}
-            width={width}
+      <div className="rounded-lg border border-gray-300 shadow-lg overflow-hidden" style={{ height, width }}>
+        {isClient && (
+          <DynamicMap
+            selectedLocation={selectedLocation}
+            onLocationSelect={handleLocationSelect}
             height={height}
-            style={{ border: 0 }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            title="Selected Location Map"
-          ></iframe>
-        ) : (
-          <div 
-            style={{ height, width }}
-            className="flex items-center justify-center bg-gray-100 text-gray-500"
-          >
-            <div className="text-center">
-              <div className="text-4xl mb-2">🗺️</div>
-              <p>Select a location to view the map</p>
-              <p className="text-sm mt-2">Use GPS, manual coordinates, or search</p>
-            </div>
-          </div>
+            width={width}
+          />
         )}
       </div>
       
@@ -295,7 +306,8 @@ const LocationMap: React.FC<LocationMapProps> = ({
           <li>Use the search box to find a location by name (currently for display only)</li>
           <li>Enter latitude and longitude manually and click "Set Location"</li>
           <li>Click "Get Current Location" to use your GPS coordinates</li>
-          <li>The map will display your selected location with a marker</li>
+          <li>Click anywhere on the map to select a new location</li>
+          <li>The map will display your selected location with a marker and popup</li>
           <li>Click "Send to Backend" to submit the coordinates to your server</li>
         </ul>
       </div>
