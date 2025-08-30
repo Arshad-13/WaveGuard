@@ -5,26 +5,44 @@ import {
   saveMessageToFirestore,
   getMessagesFromFirestore,
 } from "@/lib/chatbot-utils";
+import { useAuth } from "@/hooks/useAuth";
 import { chatWithGemini } from "@/lib/chatbot";
 import { marked } from "marked";
+import { onAuthStateChanged } from "firebase/auth";
+import { db, auth } from '@/lib/authLib';
 
-
+import { useRouter } from "next/navigation";
 
 export default function ChatBot() {
+  const { user } = useAuth();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
-  const DEMO_USER = "demo";
+  const router = useRouter();
+
+    useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (u) => {
+      if (!u) {
+        alert("Please Login first to talk with Zyra, our AI fashion consultant.")
+        router.push('/auth/login');
+      }
+      // else setUser(u);
+    });
+
+    return () => unsub();
+  }, []);
 
   // Load chat history for demo user
   useEffect(() => {
-    const fetchMessages = async () => {
-      const history = await getMessagesFromFirestore(DEMO_USER);
+    if (user?.uid) {
+      const fetchMessages = async () => {
+      const history = await getMessagesFromFirestore(user.uid);
       setMessages(history);
     };
     fetchMessages();
-  }, []);
+    }
+  }, [user]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -38,7 +56,7 @@ export default function ChatBot() {
       timestamp: new Date(),
     };
     setMessages((prev) => [...prev, message]);
-    await saveMessageToFirestore(DEMO_USER, message);
+    await saveMessageToFirestore(user.uid, message);
   };
 
   const handleSend = async () => {
@@ -57,7 +75,7 @@ export default function ChatBot() {
         );
       } else {
         const allMessages = [...messages, { role: "user", content: userInput }];
-        const response = await chatWithGemini(allMessages.map((m) => m.content), DEMO_USER);
+        const response = await chatWithGemini(allMessages.map((m) => m.content), user.uid);
         await addMessage("bot", marked(response));
       }
     } catch (err) {

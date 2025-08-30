@@ -4,7 +4,6 @@ import { HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
 import { GoogleGenAI } from "@google/genai";
 import axios from "axios";
 // import 'dotenv/config';
-const username = "Aayush";
 const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
 
 let llm = null;
@@ -32,13 +31,13 @@ if (API_KEY) {
  * @param {string} userInput - User message
  * @returns {Promise<string>} - Bot response
  */
-export async function chatWithGemini(messages) {
+export async function chatWithGemini(messages, username) {
 if (!llm || !API_KEY) {
     throw new Error("Chatbot is currently unavailable. Please check back later.");
   }
 
   let userInfo = '';
-  if (username) {
+  if (username != null) {
     userInfo = ` User's name is ${username}. Give suggestions according to the gender.`
   }
 
