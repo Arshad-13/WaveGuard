@@ -32,7 +32,7 @@ export default function RootLayout({
         className={`${inter.variable} font-sans antialiased bg-ocean-50 min-h-screen`}
       >
         <Navbar />
-        <main className="pt-16">
+        <main className="pt-20">
           {children}
         </main>
         <FloatingChatbot />

@@ -101,153 +101,191 @@ export function ChatInterface() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="bg-white dark:bg-dark-2 rounded-lg border border-gray-200 dark:border-gray-700 shadow-lg overflow-hidden">
+    <div className="max-w-6xl mx-auto">
+      <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
         
         {/* Chat Header */}
-        <div className="bg-ocean-600 dark:bg-ocean-700 p-4">
-          <div className="flex items-center space-x-3">
-            <div className="p-2 bg-ocean-500 dark:bg-ocean-600 rounded-lg">
-              <Bot className="h-6 w-6 text-white" />
+        <div className="bg-gradient-to-r from-slate-800 to-blue-900 p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="relative">
+                <div className="w-14 h-14 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <Bot className="h-7 w-7 text-white" />
+                </div>
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white animate-pulse"></div>
+              </div>
+              <div>
+                <h2 className="text-white font-bold text-xl">WaveGuard AI Assistant</h2>
+                <p className="text-blue-200 font-medium">Coastal Intelligence • Marine Safety Expert</p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-white font-semibold">AI Coastal Assistant</h2>
-              <p className="text-ocean-100 text-sm">Ready to help with ML model integration</p>
-            </div>
-            <div className="ml-auto flex items-center space-x-2">
-              <div className="w-3 h-3 bg-sky-400 rounded-full animate-pulse" />
-              <span className="text-white text-sm">Ready</span>
+            
+            <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                <span className="text-white text-sm font-semibold">Online</span>
+              </div>
+              <div className="text-right">
+                <div className="text-cyan-400 font-bold text-lg">⚡ Ready</div>
+                <div className="text-blue-200 text-xs">Sub-second response</div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Messages Area */}
-        <div className="h-96 overflow-y-auto p-4 space-y-4">
-          {messages.map((message) => (
-            <div key={message.id} className={clsx(
-              'flex items-start space-x-3',
-              message.type === 'user' ? 'flex-row-reverse space-x-reverse' : 'flex-row'
-            )}>
-              <div className={clsx(
-                'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center',
-                message.type === 'user'
-                  ? 'bg-ocean-500'
-                  : 'bg-ocean-600 dark:bg-ocean-700'
+        <div className="h-[500px] overflow-y-auto p-6 bg-gradient-to-b from-gray-50 to-white">
+          <div className="space-y-6 max-w-4xl mx-auto">
+            {messages.map((message) => (
+              <div key={message.id} className={clsx(
+                'flex items-start space-x-4',
+                message.type === 'user' ? 'flex-row-reverse space-x-reverse' : 'flex-row'
               )}>
-                {message.type === 'user' ? (
-                  <User className="h-4 w-4 text-white" />
-                ) : (
-                  <Bot className="h-4 w-4 text-white" />
-                )}
-              </div>
-              
-              <div className={clsx(
-                'max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl rounded-2xl px-4 py-3',
-                message.type === 'user'
-                  ? 'bg-ocean-500 text-white ml-auto'
-                  : 'bg-gray-100 dark:bg-dark-3 text-gray-900 dark:text-white'
-              )}>
-                <p className="whitespace-pre-line leading-relaxed">
-                  {message.content}
-                </p>
-                {message.suggestions && (
-                  <div className="mt-3 space-y-2">
-                    {message.suggestions.map((suggestion, index) => (
-                      <button
-                        key={index}
-                        onClick={() => handleSuggestionClick(suggestion)}
-                        className="block w-full text-left px-3 py-2 text-sm bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
-                      >
-                        {suggestion}
-                      </button>
-                    ))}
-                  </div>
-                )}
                 <div className={clsx(
-                  'text-xs mt-2 opacity-70',
-                  message.type === 'user' ? 'text-ocean-100' : 'text-gray-500 dark:text-gray-400'
+                  'flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center shadow-lg',
+                  message.type === 'user'
+                    ? 'bg-gradient-to-br from-blue-600 to-cyan-600'
+                    : 'bg-gradient-to-br from-slate-700 to-blue-800'
                 )}>
-                  {message.timestamp.toLocaleTimeString([], { 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
-                  })}
+                  {message.type === 'user' ? (
+                    <User className="h-6 w-6 text-white" />
+                  ) : (
+                    <Bot className="h-6 w-6 text-white" />
+                  )}
+                </div>
+                
+                <div className={clsx(
+                  'max-w-2xl rounded-2xl px-6 py-4 shadow-lg',
+                  message.type === 'user'
+                    ? 'bg-gradient-to-br from-blue-600 to-cyan-600 text-white ml-auto'
+                    : 'bg-white border border-gray-200 text-gray-900'
+                )}>
+                  <p className="whitespace-pre-line leading-relaxed text-lg font-medium">
+                    {message.content}
+                  </p>
+                  {message.suggestions && (
+                    <div className="mt-4 space-y-2">
+                      {message.suggestions.map((suggestion, index) => (
+                        <button
+                          key={index}
+                          onClick={() => handleSuggestionClick(suggestion)}
+                          className="block w-full text-left px-4 py-2 text-sm bg-white/10 hover:bg-white/20 rounded-lg transition-all duration-200 font-medium"
+                        >
+                          {suggestion}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  <div className={clsx(
+                    'text-sm mt-3 font-medium',
+                    message.type === 'user' ? 'text-blue-100' : 'text-gray-500'
+                  )}>
+                    {message.timestamp.toLocaleTimeString([], { 
+                      hour: '2-digit', 
+                      minute: '2-digit' 
+                    })}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
 
-          {isLoading && (
-            <div className="flex items-start space-x-3">
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-ocean-600 dark:bg-ocean-700 flex items-center justify-center">
-                <Bot className="h-4 w-4 text-white" />
-              </div>
-              <div className="bg-gray-100 dark:bg-dark-3 rounded-2xl px-4 py-3">
-                <div className="flex space-x-1">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+            {isLoading && (
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-slate-700 to-blue-800 flex items-center justify-center shadow-lg">
+                  <Bot className="h-6 w-6 text-white" />
+                </div>
+                <div className="bg-white border border-gray-200 rounded-2xl px-6 py-4 shadow-lg">
+                  <div className="flex items-center space-x-2">
+                    <div className="flex space-x-1">
+                      <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <div className="w-3 h-3 bg-cyan-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <div className="w-3 h-3 bg-teal-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    </div>
+                    <span className="text-gray-600 font-medium">AI is thinking...</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-          
-          <div ref={messagesEndRef} />
+            )}
+            
+            <div ref={messagesEndRef} />
+          </div>
         </div>
 
         {/* Quick Actions */}
-        <div className="px-6 py-4 bg-slate-100 dark:bg-dark-3 border-t border-gray-200 dark:border-gray-600">
-          <div className="flex flex-wrap gap-3">
-            <button 
-              onClick={() => handleSuggestionClick('What are current threats?')}
-              className="flex items-center space-x-1 px-3 py-1 bg-white dark:bg-dark-4 rounded-full text-sm text-gray-600 dark:text-gray-300 hover:bg-ocean-50 hover:text-ocean-600 dark:hover:bg-ocean-900/30 dark:hover:text-ocean-400 transition-colors"
-            >
-              <AlertCircle className="h-3 w-3" />
-              <span>Current Threats</span>
-            </button>
-            <button 
-              onClick={() => handleSuggestionClick('Emergency preparedness')}
-              className="flex items-center space-x-1 px-3 py-1 bg-white dark:bg-dark-4 rounded-full text-sm text-gray-600 dark:text-gray-300 hover:bg-ocean-50 hover:text-ocean-600 dark:hover:bg-ocean-900/30 dark:hover:text-ocean-400 transition-colors"
-            >
-              <Info className="h-3 w-3" />
-              <span>Preparedness</span>
-            </button>
-            <button 
-              onClick={() => handleSuggestionClick('Report incident')}
-              className="flex items-center space-x-1 px-3 py-1 bg-white dark:bg-dark-4 rounded-full text-sm text-gray-600 dark:text-gray-300 hover:bg-ocean-50 hover:text-ocean-600 dark:hover:bg-ocean-900/30 dark:hover:text-ocean-400 transition-colors"
-            >
-              <Zap className="h-3 w-3" />
-              <span>Report</span>
-            </button>
+        <div className="px-8 py-6 bg-gray-100 border-t border-gray-200">
+          <div className="max-w-4xl mx-auto">
+            <p className="text-sm font-semibold text-gray-700 mb-4">🚀 Quick Actions</p>
+            <div className="flex flex-wrap gap-3">
+              <button 
+                onClick={() => handleSuggestionClick('What are the current coastal threats in my area?')}
+                className="flex items-center space-x-2 px-5 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
+              >
+                <AlertCircle className="h-4 w-4" />
+                <span>Current Threats</span>
+              </button>
+              <button 
+                onClick={() => handleSuggestionClick('How should I prepare for coastal emergencies?')}
+                className="flex items-center space-x-2 px-5 py-3 bg-gradient-to-r from-teal-500 to-green-500 hover:from-teal-600 hover:to-green-600 text-white rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
+              >
+                <Info className="h-4 w-4" />
+                <span>Emergency Prep</span>
+              </button>
+              <button 
+                onClick={() => handleSuggestionClick('I need to report a coastal incident')}
+                className="flex items-center space-x-2 px-5 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
+              >
+                <Zap className="h-4 w-4" />
+                <span>Report Incident</span>
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Input Area */}
-        <div className="p-6 border-t border-gray-200 dark:border-gray-600 bg-white dark:bg-dark-2">
-          <div className="flex items-end space-x-4">
-            <div className="flex-1">
-              <input
-                ref={inputRef}
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Ask about coastal threats, safety tips, or report incidents..."
-                className="w-full px-4 py-3 bg-white dark:bg-dark-3 border border-gray-200 dark:border-dark-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-ocean-500 focus:border-transparent resize-none"
-                disabled={isLoading}
-              />
+        <div className="p-8 bg-white border-t border-gray-200">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex items-end space-x-4">
+              <div className="flex-1">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Ask about coastal threats, safety protocols, emergency procedures, or marine conditions..."
+                  className="w-full px-6 py-4 bg-gray-50 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 text-lg font-medium transition-all duration-300"
+                  disabled={isLoading}
+                />
+              </div>
+              <button
+                onClick={handleSend}
+                disabled={!input.trim() || isLoading}
+                className="flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-slate-800 to-blue-900 hover:from-slate-900 hover:to-blue-800 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-2xl font-bold text-lg shadow-lg transition-all duration-300 transform hover:scale-105"
+              >
+                {isLoading ? (
+                  <>
+                    <div className="w-5 h-5 border-t-2 border-white rounded-full animate-spin" />
+                    <span>Sending...</span>
+                  </>
+                ) : (
+                  <>
+                    <Send className="h-5 w-5" />
+                    <span>Send</span>
+                  </>
+                )}
+              </button>
             </div>
-            <button
-              onClick={handleSend}
-              disabled={!input.trim() || isLoading}
-              className="p-3 bg-ocean-600 hover:bg-ocean-700 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              <Send className="h-5 w-5" />
-            </button>
+            
+            <div className="flex items-center justify-between mt-4">
+              <p className="text-sm text-gray-500 font-medium">
+                💡 Press Enter to send • Shift+Enter for new line
+              </p>
+              <div className="flex items-center space-x-2 text-sm text-gray-500">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="font-semibold">AI Ready • Powered by WaveGuard</span>
+              </div>
+            </div>
           </div>
-          
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-            Press Enter to send, Shift+Enter for new line
-          </p>
         </div>
       </div>
     </div>
