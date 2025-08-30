@@ -20,5 +20,8 @@ httpx==0.28.1
 # Environment management
 python-dotenv==1.0.1
 
+# HTTP requests
+requests==2.32.3
+
 # Logging and monitoring
 loguru==0.7.3
