@@ -3,20 +3,23 @@
 import { SearchIcon } from "@/assets/icons";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { useSidebarContext } from "../sidebar/sidebar-context";
 import { MenuIcon } from "./icons";
 import { Notification } from "./notification";
-import { ThemeToggleSwitch } from "./theme-toggle";
+// Theme toggle removed - using light theme only
 import { UserInfo } from "./user-info";
+import { ReportThreatModal } from "@/components/dashboard/ReportThreatModal";
 
 export function Header() {
   const { toggleSidebar, isMobile } = useSidebarContext();
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-stroke bg-white px-4 py-5 shadow-1 dark:border-stroke-dark dark:bg-gray-dark md:px-5 2xl:px-10">
+    <header className="sticky top-0 z-40 flex items-center justify-between border-b border-slate-200 bg-white/95 backdrop-blur-sm px-4 py-5 shadow-sm md:px-5 2xl:px-10">
       <button
         onClick={toggleSidebar}
-        className="rounded-lg border px-1.5 py-1 dark:border-stroke-dark dark:bg-[#020D1A] hover:dark:bg-[#FFFFFF1A] lg:hidden"
+        className="rounded-lg border border-slate-300 px-1.5 py-1 bg-white hover:bg-slate-50 lg:hidden"
       >
         <MenuIcon />
         <span className="sr-only">Toggle Sidebar</span>
@@ -34,32 +37,53 @@ export function Header() {
         </Link>
       )}
 
-      <div className="max-xl:hidden">
-        <h1 className="mb-0.5 text-heading-5 font-bold text-dark dark:text-white">
-          Dashboard
-        </h1>
-        <p className="font-medium">Next.js Admin Dashboard Solution</p>
-      </div>
-
-      <div className="flex flex-1 items-center justify-end gap-2 min-[375px]:gap-4">
-        <div className="relative w-full max-w-[300px]">
-          <input
-            type="search"
-            placeholder="Search"
-            className="flex w-full items-center gap-3.5 rounded-full border bg-gray-2 py-3 pl-[53px] pr-5 outline-none transition-colors focus-visible:border-primary dark:border-dark-3 dark:bg-dark-2 dark:hover:border-dark-4 dark:hover:bg-dark-3 dark:hover:text-dark-6 dark:focus-visible:border-primary"
-          />
-
-          <SearchIcon className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 max-[1015px]:size-5" />
+      <div className="flex flex-1 items-center justify-between">
+        {/* Left spacer for mobile button when hidden on desktop */}
+        <div className="w-0 lg:w-0"></div>
+        
+        {/* Centered Dashboard Title and Actions - Single Line */}
+        <div className="flex items-center justify-center flex-1 space-x-8 max-xl:hidden">
+          {/* Dashboard Title with Coastal Theme */}
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-blue-700">
+              WaveGuard Dashboard 🌊
+            </h1>
+            <p className="text-xs text-blue-600 font-medium opacity-80 -mt-1">
+              Coastal Protection & Monitoring System
+            </p>
+          </div>
+          
+          {/* Quick Actions */}
+          <div className="flex items-center space-x-3">
+            <button 
+              onClick={() => setIsReportModalOpen(true)}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200 shadow-sm"
+            >
+              🚨 Report Threat
+            </button>
+            <Link
+              href="/dashboard/analytics"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200 shadow-sm"
+            >
+              📊 Analytics
+            </Link>
+          </div>
         </div>
 
-        <ThemeToggleSwitch />
-
-        <Notification />
-
-        <div className="shrink-0">
-          <UserInfo />
+        {/* Right Side Actions */}
+        <div className="flex items-center gap-4">
+          <Notification />
+          <div className="shrink-0">
+            <UserInfo />
+          </div>
         </div>
       </div>
+      
+      {/* Modal */}
+      <ReportThreatModal 
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+      />
     </header>
   );
 }

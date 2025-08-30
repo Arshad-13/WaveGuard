@@ -1,101 +1,97 @@
 import Link from 'next/link';
-import { ArrowRight, Shield, Waves } from 'lucide-react';
+import { ArrowRight, Shield, Waves, Bell, UserPlus, LogIn } from 'lucide-react';
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center bg-ocean-50 overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-primary rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
-        <div className="absolute top-40 right-20 w-72 h-72 bg-cyan-400 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
-        <div className="absolute -bottom-8 left-20 w-72 h-72 bg-teal-500 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
+    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-cyan-900 overflow-hidden pt-16 pb-16">
+      {/* Enhanced background decoration */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-cyan-400/20 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-full blur-3xl" />
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 text-center">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 text-center py-4">
         {/* Hero Badge */}
-        <div className="inline-flex items-center space-x-2 bg-white px-4 py-2 rounded-full shadow-lg mb-8">
-          <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-          <span className="text-sm font-medium text-ocean-700">Live Monitoring Active</span>
-        </div>
-        
-        {/* Logo/Icon */}
-        <div className="flex justify-center mb-10">
-          <div className="relative">
-            <div className="p-6 bg-primary rounded-2xl shadow-2xl">
-              <Waves className="h-20 w-20 text-white" />
-            </div>
-            <div className="absolute -top-2 -right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-              <Shield className="h-4 w-4 text-white" />
-            </div>
-          </div>
+        <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm border border-white/20 px-6 py-3 rounded-full shadow-xl mb-8 mt-4">
+          <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+          <span className="text-sm font-bold text-white">🌊 Live Monitoring Active</span>
         </div>
         
         {/* Main Heading */}
-        <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
-          <span className="text-ocean-900">Coastal</span>
-          <span className="block text-primary">Threat Guard</span>
-        </h1>
+        <div className="mb-8">
+          <h1 className="text-6xl sm:text-7xl lg:text-8xl font-black text-white mb-6 leading-tight tracking-tight">
+            Coastal Threat
+            <span className="block bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+              Detection System
+            </span>
+          </h1>
+        </div>
         
         {/* Subtitle */}
-        <p className="text-xl md:text-2xl mb-12 text-ocean-700 max-w-4xl mx-auto leading-relaxed font-medium">
-          Advanced AI-powered monitoring system delivering real-time coastal threat detection, 
-          tsunami alerts, and cyclone tracking to protect communities worldwide.
+        <p className="text-xl sm:text-2xl text-gray-200 mb-16 max-w-4xl mx-auto leading-relaxed font-medium">
+          Advanced AI-powered monitoring and early warning system for tsunamis, cyclones, 
+          and coastal hazards. <span className="text-cyan-300 font-semibold">Protecting communities through real-time detection and instant alerts.</span>
         </p>
         
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
+        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
+          <Link
+            href="/auth?mode=signup"
+            className="group bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white px-10 py-5 rounded-2xl font-bold text-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/25 flex items-center space-x-3"
+          >
+            <UserPlus className="h-7 w-7" />
+            <span>Get Started</span>
+            <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
+          </Link>
+          
+          <Link
+            href="/auth?mode=signin"
+            className="group bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 hover:border-cyan-400 px-10 py-5 rounded-2xl font-bold text-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:bg-white/20 flex items-center space-x-3"
+          >
+            <LogIn className="h-7 w-7" />
+            <span>Sign In</span>
+          </Link>
+        </div>
+
+        {/* Secondary Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-20">
           <Link
             href="/dashboard"
-            className="group flex items-center space-x-3 bg-primary hover:bg-ocean-700 text-white px-10 py-4 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+            className="group bg-white/5 backdrop-blur-sm text-white border border-white/20 hover:border-cyan-400/50 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 hover:scale-105 hover:bg-white/10 flex items-center space-x-2"
           >
-            <Shield className="h-6 w-6" />
-            <span>Launch Dashboard</span>
-            <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            <Shield className="h-5 w-5" />
+            <span>View Dashboard</span>
           </Link>
           
           <Link
             href="/report"
-            className="group flex items-center space-x-3 bg-white hover:bg-ocean-100 text-primary border-2 border-primary px-10 py-4 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+            className="group bg-white/5 backdrop-blur-sm text-white border border-white/20 hover:border-cyan-400/50 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 hover:scale-105 hover:bg-white/10 flex items-center space-x-2"
           >
-            <span>Report Threat</span>
-            <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            <Bell className="h-5 w-5" />
+            <span>Report Activity</span>
           </Link>
         </div>
 
-        {/* Professional Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          <div className="bg-white rounded-2xl p-8 shadow-xl border-l-4 border-primary transform hover:scale-105 transition-all duration-300">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-ocean-100 rounded-xl flex items-center justify-center">
-                <Shield className="h-6 w-6 text-primary" />
-              </div>
-              <div className="text-3xl font-bold text-primary">24/7</div>
-            </div>
-            <h3 className="text-lg font-semibold text-ocean-900 mb-2">Continuous Monitoring</h3>
-            <p className="text-ocean-700 text-sm">Round-the-clock surveillance of coastal conditions</p>
+        {/* Enhanced Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-5xl mx-auto mb-16">
+          <div className="bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm border border-white/20 p-8 rounded-3xl hover:scale-105 transition-all duration-300 hover:shadow-2xl">
+            <div className="text-5xl font-black bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-3">24/7</div>
+            <div className="text-white font-bold text-lg">Real-time Monitoring</div>
+            <div className="text-gray-300 text-sm mt-2">Continuous AI surveillance</div>
           </div>
           
-          <div className="bg-white rounded-2xl p-8 shadow-xl border-l-4 border-cyan-500 transform hover:scale-105 transition-all duration-300">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-cyan-100 rounded-xl flex items-center justify-center">
-                <Waves className="h-6 w-6 text-cyan-500" />
-              </div>
-              <div className="text-3xl font-bold text-cyan-500">AI</div>
-            </div>
-            <h3 className="text-lg font-semibold text-ocean-900 mb-2">Smart Detection</h3>
-            <p className="text-ocean-700 text-sm">Machine learning algorithms for precise threat analysis</p>
+          <div className="bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm border border-white/20 p-8 rounded-3xl hover:scale-105 transition-all duration-300 hover:shadow-2xl">
+            <div className="text-5xl font-black bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-3">99.9%</div>
+            <div className="text-white font-bold text-lg">Detection Accuracy</div>
+            <div className="text-gray-300 text-sm mt-2">ML-powered precision</div>
           </div>
           
-          <div className="bg-white rounded-2xl p-8 shadow-xl border-l-4 border-green-500 transform hover:scale-105 transition-all duration-300">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                <ArrowRight className="h-6 w-6 text-green-500" />
-              </div>
-              <div className="text-3xl font-bold text-green-500">Real-time</div>
-            </div>
-            <h3 className="text-lg font-semibold text-ocean-900 mb-2">Instant Alerts</h3>
-            <p className="text-ocean-700 text-sm">Immediate notifications when threats are detected</p>
+          <div className="bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm border border-white/20 p-8 rounded-3xl hover:scale-105 transition-all duration-300 hover:shadow-2xl">
+            <div className="text-5xl font-black bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-3">&lt;30s</div>
+            <div className="text-white font-bold text-lg">Alert Response Time</div>
+            <div className="text-gray-300 text-sm mt-2">Instant notifications</div>
           </div>
         </div>
       </div>

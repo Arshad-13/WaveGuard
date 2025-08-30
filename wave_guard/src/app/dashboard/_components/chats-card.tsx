@@ -9,8 +9,8 @@ export async function ChatsCard() {
   const data = await getChatsData();
 
   return (
-    <div className="col-span-12 rounded-[10px] bg-white py-6 shadow-1 dark:bg-gray-dark dark:shadow-card xl:col-span-4">
-      <h2 className="mb-5.5 px-7.5 text-body-2xlg font-bold text-dark dark:text-white">
+    <div className="col-span-12 rounded-[10px] bg-white py-6 shadow-1 xl:col-span-4">
+      <h2 className="mb-5.5 px-7.5 text-body-2xlg font-bold text-dark">
         Chats
       </h2>
 
@@ -19,7 +19,7 @@ export async function ChatsCard() {
           <li key={key}>
             <Link
               href="/"
-              className="flex items-center gap-4.5 px-7.5 py-3 outline-none hover:bg-gray-2 focus-visible:bg-gray-2 dark:hover:bg-dark-2 dark:focus-visible:bg-dark-2"
+              className="flex items-center gap-4.5 px-7.5 py-3 outline-none hover:bg-gray-2 focus-visible:bg-gray-2"
             >
               <div className="relative shrink-0">
                 <Image
@@ -32,22 +32,22 @@ export async function ChatsCard() {
 
                 <span
                   className={cn(
-                    "absolute bottom-0 right-0 size-3.5 rounded-full ring-2 ring-white dark:ring-dark-2",
+                    "absolute bottom-0 right-0 size-3.5 rounded-full ring-2 ring-white",
                     chat.isActive ? "bg-green" : "bg-orange-light",
                   )}
                 />
               </div>
 
               <div className="relative flex-grow">
-                <h3 className="font-medium text-dark dark:text-white">
+                <h3 className="font-medium text-dark">
                   {chat.name}
                 </h3>
 
                 <div className="flex flex-wrap items-center gap-2">
                   <span
                     className={cn(
-                      "truncate text-sm font-medium dark:text-dark-5 xl:max-w-[8rem]",
-                      chat.unreadCount && "text-dark-4 dark:text-dark-6",
+                      "truncate text-sm font-medium xl:max-w-[8rem]",
+                      chat.unreadCount && "text-dark-4",
                     )}
                   >
                     {chat.lastMessage.content}
