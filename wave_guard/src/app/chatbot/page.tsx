@@ -1,8 +1,90 @@
 "use client";
 
-import { ChatInterface } from "@/components/chatbot/ChatInterface";
+import { useState, useEffect, useRef } from "react";
+import {
+  saveMessageToFirestore,
+  getMessagesFromFirestore,
+} from "@/lib/chatbot-utils";
+import { useAuth } from "@/hooks/useAuth";
+import { chatWithGemini } from "@/lib/chatbot";
+import { marked } from "marked";
+import { onAuthStateChanged } from "firebase/auth";
+import { db, auth } from '@/lib/authLib';
+
+import { useRouter } from "next/navigation";
 
 export default function ChatBot() {
+  const { user } = useAuth();
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const messagesEndRef = useRef(null);
+  const router = useRouter();
+
+    useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (u) => {
+      if (!u) {
+        alert("Please Login first to talk with Zyra, our AI fashion consultant.")
+        router.push('/auth/login');
+      }
+      // else setUser(u);
+    });
+
+    return () => unsub();
+  }, []);
+
+  // Load chat history for demo user
+  useEffect(() => {
+    if (user?.uid) {
+      const fetchMessages = async () => {
+      const history = await getMessagesFromFirestore(user.uid);
+      setMessages(history);
+    };
+    fetchMessages();
+    }
+  }, [user]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [messages, loading]);
+
+  const addMessage = async (role, content) => {
+    const message = {
+      role,
+      type: "text",
+      content,
+      timestamp: new Date(),
+    };
+    setMessages((prev) => [...prev, message]);
+    await saveMessageToFirestore(user.uid, message);
+  };
+
+  const handleSend = async () => {
+    if (!input.trim()) return;
+
+    const userInput = input.trim();
+    await addMessage("user", userInput);
+    setInput("");
+    setLoading(true);
+
+    try {
+      if (userInput === "/help") {
+        await addMessage(
+          "bot",
+          "Instructions:\n- What should I do if Tsunami strikes in?"
+        );
+      } else {
+        const allMessages = [...messages, { role: "user", content: userInput }];
+        const response = await chatWithGemini(allMessages.map((m) => m.content), user.uid);
+        await addMessage("bot", marked(response));
+      }
+    } catch (err) {
+      await addMessage("bot", "Oops! " + err.message);
+    }
+
+    setLoading(false);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50 p-6">
       <div className="max-w-7xl mx-auto">
