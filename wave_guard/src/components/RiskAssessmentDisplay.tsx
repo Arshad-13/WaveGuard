@@ -45,38 +45,42 @@ const RiskAssessmentDisplay: React.FC<RiskAssessmentDisplayProps> = ({
     );
   }
 
-  // Get alert styling based on status
-  const getAlertStyling = (status: string) => {
-    switch (status) {
-      case 'High Alert':
+  // Get alert styling based on risk level
+  const getAlertStyling = (riskLevel: string) => {
+    switch (riskLevel) {
+      case 'high':
         return {
           containerClass: 'bg-red-50 border-red-500',
           titleClass: 'text-red-800',
-          icon: '🚨'
+          icon: '🚨',
+          label: 'High Risk'
         };
-      case 'Elevated Alert':
+      case 'medium':
         return {
           containerClass: 'bg-orange-50 border-orange-500',
           titleClass: 'text-orange-800',
-          icon: '⚠️'
+          icon: '⚠️',
+          label: 'Medium Risk'
         };
-      case 'Advisory':
+      case 'low':
         return {
           containerClass: 'bg-yellow-50 border-yellow-500',
           titleClass: 'text-yellow-800',
-          icon: '📋'
+          icon: '📋',
+          label: 'Low Risk'
         };
-      case 'All Clear':
+      case 'no_risk':
       default:
         return {
           containerClass: 'bg-green-50 border-green-500',
           titleClass: 'text-green-800',
-          icon: '✅'
+          icon: '✅',
+          label: 'No Risk'
         };
     }
   };
 
-  const styling = getAlertStyling(assessment.overall_status);
+  const styling = getAlertStyling(assessment.riskLevel);
 
   // Format timestamp
   const formatTime = (timestamp: string) => {
@@ -92,24 +96,14 @@ const RiskAssessmentDisplay: React.FC<RiskAssessmentDisplayProps> = ({
       {/* Main status card */}
       <div className={`p-4 border-2 rounded-lg ${styling.containerClass}`}>
         <div className={`text-lg font-bold ${styling.titleClass} mb-2`}>
-          {styling.icon} {assessment.overall_status}
+          {styling.icon} {styling.label}
+        </div>
+        
+        <div className="text-sm mb-3 text-gray-700">
+          {assessment.description}
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <div className="text-sm">
-              <strong>Location:</strong> {assessment.user_location.latitude.toFixed(4)}, {assessment.user_location.longitude.toFixed(4)}
-            </div>
-            <div className="text-sm mt-1">
-              <strong>Risk Level:</strong> {assessment.highest_risk.risk_zone}
-            </div>
-            {assessment.earthquake_count > 0 && (
-              <div className="text-sm mt-1">
-                <strong>Earthquakes Analyzed:</strong> {assessment.earthquake_count}
-              </div>
-            )}
-          </div>
-          
           <div>
             <div className="text-sm">
               <strong>Data Source:</strong> {assessment.feed_info.source}
@@ -117,16 +111,27 @@ const RiskAssessmentDisplay: React.FC<RiskAssessmentDisplayProps> = ({
             <div className="text-sm mt-1">
               <strong>Feed Type:</strong> {assessment.feed_info.feed_type.replace(/_/g, ' ').toUpperCase()}
             </div>
-            <div className="text-sm mt-1">
+            {assessment.feed_info.total_earthquakes_in_feed && (
+              <div className="text-sm mt-1">
+                <strong>Total Earthquakes:</strong> {assessment.feed_info.total_earthquakes_in_feed}
+              </div>
+            )}
+          </div>
+          
+          <div>
+            <div className="text-sm">
               <strong>Last Updated:</strong> {formatTime(assessment.timestamp)}
+            </div>
+            <div className="text-sm mt-1">
+              <strong>Feed Last Updated:</strong> {formatTime(assessment.feed_info.last_updated)}
             </div>
           </div>
         </div>
 
-        {assessment.highest_risk.distance_km > 0 && (
+        {assessment.nearestEarthquake && (
           <div className="mt-3 text-sm">
-            <strong>Closest Threat:</strong> {assessment.highest_risk.distance_km}km away<br />
-            <span className="text-gray-600">{assessment.highest_risk.reasoning}</span>
+            <strong>Nearest Earthquake:</strong> Magnitude {assessment.nearestEarthquake.magnitude} - {assessment.nearestEarthquake.distance}km away<br />
+            <span className="text-gray-600">{assessment.nearestEarthquake.location} at {assessment.nearestEarthquake.time}</span>
           </div>
         )}
       </div>
@@ -143,63 +148,26 @@ const RiskAssessmentDisplay: React.FC<RiskAssessmentDisplayProps> = ({
         </ul>
       </div>
 
-      {/* Earthquake details */}
-      {assessment.earthquake_count > 0 && (
+      {/* Nearest earthquake details */}
+      {assessment.nearestEarthquake && (
         <div className="p-4 bg-white border border-gray-200 rounded-lg">
           <h3 className="text-md font-bold text-gray-800 mb-2">
-            🌍 Recent Earthquakes ({assessment.earthquake_count})
+            🌍 Nearest Earthquake
           </h3>
           
-          <div className="space-y-3 max-h-60 overflow-y-auto">
-            {assessment.earthquakes_analyzed.slice(0, 5).map((eq, index) => (
-              <div key={eq.earthquake.id} className="border-l-4 border-gray-300 pl-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="text-sm font-medium">
-                      Magnitude {eq.earthquake.magnitude} - {eq.earthquake.place}
-                    </div>
-                    <div className="text-xs text-gray-600 mt-1">
-                      Depth: {eq.earthquake.depth}km | Distance: {eq.user_risk.distance_km}km
-                    </div>
-                  </div>
-                  
-                  <div className="ml-4 text-right">
-                    <div className={`text-xs font-bold ${eq.tsunami_prediction ? 'text-red-600' : 'text-green-600'}`}>
-                      {eq.tsunami_prediction ? '🌊 TSUNAMI RISK' : '✅ NO TSUNAMI'}
-                    </div>
-                    {eq.tsunami_prediction && (
-                      <div className="text-xs text-gray-600">
-                        {Math.round(eq.tsunami_probability * 100)}% probability
-                      </div>
-                    )}
-                  </div>
-                </div>
-                
-                <div className="mt-1">
-                  <span 
-                    className={`inline-block px-2 py-1 rounded text-xs font-medium`}
-                    style={{
-                      backgroundColor: getRiskBackgroundColor(eq.user_risk.risk_zone),
-                      color: getRiskTextColor(eq.user_risk.risk_zone)
-                    }}
-                  >
-                    {eq.user_risk.risk_zone}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          {assessment.earthquake_count > 5 && (
-            <div className="text-xs text-gray-500 mt-2">
-              Showing 5 of {assessment.earthquake_count} earthquakes
+          <div className="border-l-4 border-gray-300 pl-3">
+            <div className="text-sm font-medium">
+              Magnitude {assessment.nearestEarthquake.magnitude} - {assessment.nearestEarthquake.location}
             </div>
-          )}
+            <div className="text-xs text-gray-600 mt-1">
+              Distance: {assessment.nearestEarthquake.distance}km | Time: {assessment.nearestEarthquake.time}
+            </div>
+          </div>
         </div>
       )}
 
       {/* No earthquakes message */}
-      {assessment.earthquake_count === 0 && (
+      {!assessment.nearestEarthquake && assessment.riskLevel === 'no_risk' && (
         <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
           <div className="text-green-800">
             <div className="text-md font-bold mb-2">✅ All Clear</div>
@@ -223,6 +191,9 @@ const RiskAssessmentDisplay: React.FC<RiskAssessmentDisplayProps> = ({
           <div>• Total Earthquakes in Feed: {assessment.feed_info.total_earthquakes_in_feed || 'N/A'}</div>
           <div>• Assessment Timestamp: {assessment.timestamp}</div>
           <div>• Feed Last Updated: {formatTime(assessment.feed_info.last_updated)}</div>
+          {assessment.nearestEarthquake && (
+            <div>• Nearest Earthquake: Magnitude {assessment.nearestEarthquake.magnitude} at {assessment.nearestEarthquake.distance}km</div>
+          )}
         </div>
       </details>
     </div>

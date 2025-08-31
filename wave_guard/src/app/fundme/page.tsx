@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import './fundme.css';
 
 const FundraisersGrid = () => {
@@ -58,7 +59,7 @@ const FundraisersGrid = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {fundraisers.map((fundraiser) => (
         <div key={fundraiser.id} className="bg-gray-800 bg-opacity-50 rounded-lg shadow-lg overflow-hidden backdrop-blur-sm border border-gray-700">
-          <img src={fundraiser.imageUrl} alt={fundraiser.title} className="w-full h-48 object-cover" />
+          <Image src={fundraiser.imageUrl} alt={fundraiser.title} className="w-full h-48 object-cover" width={400} height={192} />
           <div className="p-6">
             <h3 className="text-xl font-bold mb-2 text-white">{fundraiser.title}</h3>
             <p className="text-gray-300 mb-4">{fundraiser.description}</p>
@@ -105,7 +106,7 @@ const FundMePage = () => {
                 <span className="block text-cyan-400">start here</span>
               </h1>
               <p className="mt-3 max-w-md mx-auto text-base text-gray-300 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-                Get started in just a few minutes — with helpful new tools, it's easier than ever to pick the perfect title, write a compelling story, and share it with the world.
+                Get started in just a few minutes — with helpful new tools, it&apos;s easier than ever to pick the perfect title, write a compelling story, and share it with the world.
               </p>
               <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
                 <div className="rounded-md shadow">

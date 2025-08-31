@@ -47,13 +47,13 @@ Test the health endpoint: `https://your-app-name.onrender.com/health`
 Set these environment variables in your Vercel dashboard:
 
 ```
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
+NEXT_PUBLIC_GOOGLE_API_KEY=your_google_api_key_here
 NEXT_PUBLIC_BACKEND_URL=https://your-render-backend.onrender.com
 ```
 
 Or use Vercel secrets (recommended):
 ```bash
-vercel env add NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+vercel env add NEXT_PUBLIC_GOOGLE_API_KEY
 vercel env add NEXT_PUBLIC_BACKEND_URL
 ```
 
@@ -131,7 +131,7 @@ curl -X POST https://your-render-backend.onrender.com/api/location \
 ### Frontend (Vercel)
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` | Google Maps API key | `AIzaSy...` |
+| `NEXT_PUBLIC_GOOGLE_API_KEY` | Google API key (Maps & Gemini) | `AIzaSy...` |
 | `NEXT_PUBLIC_BACKEND_URL` | Backend API URL | `https://myapi.onrender.com` |
 
 ## Monitoring and Maintenance
