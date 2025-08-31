@@ -47,7 +47,7 @@ function AuthActionPageContent() {
             "Your email address has been verified successfully! You can now log in."
           );
           setIsVerifying(false);
-          setTimeout(() => router.push("/login?message=Email verified successfully"), 3000);
+          setTimeout(() => router.push("/auth?message=Email verified successfully"), 3000);
         })
         .catch((err) => {
           console.error("Error verifying email:", err);
@@ -90,7 +90,7 @@ function AuthActionPageContent() {
       );
       setNewPassword("");
       setConfirmNewPassword("");
-      setTimeout(() => router.push("/login?message=Password reset successfully"), 3000);
+      setTimeout(() => router.push("/auth?message=Password reset successfully"), 3000);
     } catch (err) {
       console.error("Error confirming password reset:", err);
       setError(
@@ -124,7 +124,7 @@ function AuthActionPageContent() {
             <div className="bg-green-50 text-green-600 p-3 rounded-lg mb-4 text-sm">
               {message}
             </div>
-            <Link href="/login" className="text-accent hover:underline font-medium">
+            <Link href="/auth" className="text-accent hover:underline font-medium">
               Proceed to Login
             </Link>
           </div>
@@ -148,7 +148,7 @@ function AuthActionPageContent() {
               {message}
             </div>
           )}
-          <Link href="/login" className="text-accent hover:underline font-medium">
+          <Link href="/auth" className="text-accent hover:underline font-medium">
             Back to Login
           </Link>
         </div>
@@ -225,7 +225,7 @@ function AuthActionPageContent() {
         </form>
         <p className="mt-6 text-center text-sm text-gray-500">
           Remember your password?{" "}
-          <Link href="/login" className="text-accent hover:underline font-medium">
+          <Link href="/auth" className="text-accent hover:underline font-medium">
             Login
           </Link>
         </p>

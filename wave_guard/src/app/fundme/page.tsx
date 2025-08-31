@@ -1,15 +1,16 @@
 import Link from 'next/link';
-import Image from 'next/image';
+// import Image from 'next/image';
+import React from 'react';
 import './fundme.css';
 
 const FundraisersGrid = () => {
-  // Placeholder data
+  // Fundraiser data with diverse Pexels images
   const fundraisers = [
     {
       id: 1,
       title: 'Rebuild Our Home Lost in a Wildfire',
       description: 'A wildfire destroyed our home and all our belongings. We are raising money to rebuild and get back on our feet.',
-      imageUrl: '/images/placeholder-1.jpg',
+      imageUrl: 'https://images.pexels.com/photos/948270/pexels-photo-948270.jpeg?auto=compress&cs=tinysrgb&w=800',
       goal: 50000,
       raised: 12500,
     },
@@ -17,7 +18,7 @@ const FundraisersGrid = () => {
       id: 2,
       title: 'Flood Relief for Our Community',
       description: 'Our town was devastated by a recent flood. We are raising funds to provide food, water, and shelter to those affected.',
-      imageUrl: '/images/placeholder-2.jpg',
+      imageUrl: 'https://images.pexels.com/photos/709542/pexels-photo-709542.jpeg?auto=compress&cs=tinysrgb&w=800',
       goal: 100000,
       raised: 45000,
     },
@@ -25,7 +26,7 @@ const FundraisersGrid = () => {
       id: 3,
       title: 'Help Us Recover from the Hurricane',
       description: 'A hurricane destroyed our small business. We are raising money to repair the damage and reopen our doors.',
-      imageUrl: '/images/placeholder-3.jpg',
+      imageUrl: 'https://images.pexels.com/photos/753619/pexels-photo-753619.jpeg?auto=compress&cs=tinysrgb&w=800',
       goal: 25000,
       raised: 5000,
     },
@@ -33,7 +34,7 @@ const FundraisersGrid = () => {
         id: 4,
         title: 'Tornado Recovery for the Smith Family',
         description: 'The Smith family lost everything in a tornado. We are raising funds to help them rebuild their lives.',
-        imageUrl: '/images/placeholder-4.jpg',
+      imageUrl: 'https://images.pexels.com/photos/1119974/pexels-photo-1119974.jpeg?auto=compress&cs=tinysrgb&w=800',
         goal: 75000,
         raised: 32000,
     },
@@ -41,7 +42,7 @@ const FundraisersGrid = () => {
         id: 5,
         title: 'Earthquake Relief for a Small Village',
         description: 'A recent earthquake has left a small village in ruins. We are raising funds to provide emergency supplies and support.',
-        imageUrl: '/images/placeholder-5.jpg',
+      imageUrl: 'https://images.pexels.com/photos/7806169/pexels-photo-7806169.jpeg?auto=compress&cs=tinysrgb&w=800',
         goal: 200000,
         raised: 95000,
     },
@@ -49,7 +50,7 @@ const FundraisersGrid = () => {
         id: 6,
         title: 'Support for Farmers Affected by Drought',
         description: 'A severe drought has devastated local farms. We are raising funds to help farmers and their families.',
-        imageUrl: '/images/placeholder-6.jpg',
+      imageUrl: 'https://images.pexels.com/photos/60013/desert-drought-dehydrated-clay-soil-60013.jpeg?auto=compress&cs=tinysrgb&w=800',
         goal: 60000,
         raised: 15000,
     },
@@ -59,7 +60,13 @@ const FundraisersGrid = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {fundraisers.map((fundraiser) => (
         <div key={fundraiser.id} className="bg-gray-800 bg-opacity-50 rounded-lg shadow-lg overflow-hidden backdrop-blur-sm border border-gray-700">
-          <Image src={fundraiser.imageUrl} alt={fundraiser.title} className="w-full h-48 object-cover" width={400} height={192} />
+          <img 
+            src={fundraiser.imageUrl} 
+            alt={fundraiser.title} 
+            className="w-full h-48 object-cover"
+            width={400}
+            height={192}
+          />
           <div className="p-6">
             <h3 className="text-xl font-bold mb-2 text-white">{fundraiser.title}</h3>
             <p className="text-gray-300 mb-4">{fundraiser.description}</p>

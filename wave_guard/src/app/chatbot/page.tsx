@@ -16,7 +16,7 @@ export default function ChatBot() {
     const unsub = onAuthStateChanged(auth, (u) => {
       if (!u) {
         alert("Please Login first to talk with WaveGuard, our AI coastal safety assistant.")
-        router.push('/auth/login');
+        router.push('/auth');
       }
     });
 
@@ -24,7 +24,7 @@ export default function ChatBot() {
   }, [router]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-cyan-700 p-6">
       <ChatInterface />
     </div>
   );

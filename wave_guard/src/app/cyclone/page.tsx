@@ -52,7 +52,7 @@ export default function CyclonePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-sky-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -132,7 +132,7 @@ export default function CyclonePage() {
               </p>
             </div>
             <div className="p-4">
-              <div className="h-[600px]">
+              <div className="h-[600px] relative z-0">
                 <CycloneRiskMap
                   selectedLocation={selectedLocation}
                   onLocationSelect={handleLocationSelect}
@@ -241,31 +241,7 @@ export default function CyclonePage() {
           </div>
         </div>
 
-        {/* API Information */}
-        <div className="mt-8 bg-gray-50 rounded-lg p-6 border border-gray-200">
-          <h3 className="text-lg font-bold text-gray-800 mb-3">🔌 Technical Implementation</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-            <div>
-              <div className="font-medium text-gray-700">Main Endpoint:</div>
-              <code className="bg-gray-200 px-2 py-1 rounded">POST /assess/cyclone-risk</code>
-              <div className="text-gray-600 mt-1">Comprehensive cyclone risk assessment with live weather data</div>
-            </div>
-            <div>
-              <div className="font-medium text-gray-700">Data Source:</div>
-              <code className="bg-gray-200 px-2 py-1 rounded">OpenWeatherMap Current Weather API</code>
-              <div className="text-gray-600 mt-1">Real-time atmospheric pressure and wind speed data</div>
-            </div>
-          </div>
-          
-          <div className="mt-4 p-4 bg-white rounded border">
-            <h4 className="font-medium text-gray-800 mb-2">Key Weather Parameters:</h4>
-            <ul className="text-sm text-gray-600 space-y-1">
-              <li><strong>Atmospheric Pressure:</strong> Critical indicator for cyclone formation (low pressure systems)</li>
-              <li><strong>Wind Speed:</strong> Current wind conditions and patterns affecting development</li>
-              <li><strong>Additional Factors:</strong> Temperature, humidity, and visibility for comprehensive analysis</li>
-            </ul>
-          </div>
-        </div>
+
       </div>
     </div>
   );

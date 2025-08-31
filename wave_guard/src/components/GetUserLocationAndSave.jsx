@@ -6,7 +6,7 @@ useEffect(() => {
 
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
-      router.push('/login');
+      router.push('/auth');
       return;
     }
 

@@ -28,11 +28,11 @@ export const NAV_DATA = [
         items: [
           {
             title: "Tsunami Detection",
-            url: "/analytics/tsunami",
+            url: "/location",
           },
           {
             title: "Cyclone Tracking",
-            url: "/analytics/cyclone",
+            url: "/cyclone",
           },
           {
             title: "ML Models",

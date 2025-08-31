@@ -67,7 +67,7 @@ function UpdatePasswordPageContent() {
       await confirmPasswordReset(auth, actionCode, password);
       setMessage("Password updated successfully. You can now log in with your new password.");
       setTimeout(() => {
-        router.push("/login?message=Password updated successfully");
+        router.push("/auth?message=Password updated successfully");
       }, 3000);
     } catch (err: unknown) {
       const firebaseError = err as { code?: string; message?: string };
@@ -150,7 +150,7 @@ function UpdatePasswordPageContent() {
         )}
         {(error || (message && !error)) && (
            <p className="mt-6 text-center text-sm text-gray-500">
-             <Link href="/login" className="text-accent hover:underline font-medium">
+             <Link href="/auth" className="text-accent hover:underline font-medium">
                Back to login
              </Link>
            </p>

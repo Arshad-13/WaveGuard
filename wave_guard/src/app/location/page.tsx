@@ -42,17 +42,18 @@ export default function LocationPage() {
     }
   };
 
-  // Preset locations for quick testing
+  // Preset locations for quick testing (tsunami-prone areas)
   const presetLocations = [
     { name: 'Tokyo, Japan', lat: 35.6762, lng: 139.6503 },
-    { name: 'San Francisco, USA', lat: 37.7749, lng: -122.4194 },
-    { name: 'Manila, Philippines', lat: 14.5995, lng: 120.9842 },
     { name: 'Jakarta, Indonesia', lat: -6.2088, lng: 106.8456 },
-    { name: 'Sydney, Australia', lat: -33.8688, lng: 151.2093 },
+    { name: 'Lima, Peru', lat: -12.0464, lng: -77.0428 },
+    { name: 'San Francisco, USA', lat: 37.7749, lng: -122.4194 },
+    { name: 'Valparaíso, Chile', lat: -33.0472, lng: -71.6127 },
+    { name: 'Banda Aceh, Indonesia', lat: 5.5483, lng: 95.3238 },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-sky-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -60,7 +61,7 @@ export default function LocationPage() {
             🌊 WaveGuard Real-Time Tsunami Risk Assessment
           </h1>
           <p className="text-lg text-gray-600">
-            Click anywhere on the map to get real-time tsunami risk assessment based on recent USGS earthquake data
+            Click anywhere on the map to get real-time tsunami risk assessment based on live USGS earthquake data
           </p>
         </div>
 
@@ -70,27 +71,23 @@ export default function LocationPage() {
             <h3 className="text-lg font-bold text-gray-800 mb-4">🔧 Assessment Settings</h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Feed type selector */}
+              {/* Information about the system */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Earthquake Data Source:
                 </label>
-                <select
-                  value={feedType}
-                  onChange={(e) => setFeedType(e.target.value as 'past_hour_m45' | 'past_day_m45' | 'past_hour_m25' | 'past_day_all' | 'past_week_m45' | 'past_month_m45')}
-                  className="w-full p-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="past_hour_m45">🕐 Past Hour - Magnitude 4.5+</option>
-                  <option value="past_day_m45">📅 Past Day - Magnitude 4.5+</option>
-                  <option value="past_hour_m25">🕐 Past Hour - Magnitude 2.5+</option>
-                  <option value="past_day_all">📅 Past Day - All Earthquakes</option>
-                  <option value="past_week_m45">📊 Past Week - Magnitude 4.5+</option>
-                  <option value="past_month_m45">🗓️ Past Month - Magnitude 4.5+</option>
-                </select>
-                <p className="text-xs text-gray-500 mt-1">
-                  {feedType === 'past_hour_m45' && 'Often shows "no earthquakes" scenario for testing'}
-                  {feedType === 'past_day_all' && 'Shows the most earthquake data for comprehensive analysis'}
-                  {feedType === 'past_day_m45' && 'Balanced feed showing significant earthquakes'}
+                <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-blue-600">🌍</span>
+                    <div>
+                      <div className="font-medium text-blue-800">USGS Earthquake API</div>
+                      <div className="text-sm text-blue-600">Live earthquake data from global seismic sensors</div>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  The system fetches real-time earthquake data from USGS feeds, then uses machine learning 
+                  to predict tsunami potential based on magnitude, depth, and location.
                 </p>
               </div>
 
@@ -106,11 +103,35 @@ export default function LocationPage() {
                       onClick={() => handleLocationSelect(preset)}
                       className="px-3 py-2 text-xs bg-blue-100 text-blue-800 rounded hover:bg-blue-200 transition-colors text-left"
                     >
-                      📍 {preset.name}
+                      🌊 {preset.name}
                     </button>
                   ))}
                 </div>
               </div>
+            </div>
+
+            {/* Feed type selector */}
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Earthquake Data Feed:
+              </label>
+              <select
+                value={feedType}
+                onChange={(e) => setFeedType(e.target.value as 'past_hour_m45' | 'past_day_m45' | 'past_hour_m25' | 'past_day_all' | 'past_week_m45' | 'past_month_m45')}
+                className="w-full p-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="past_hour_m45">🕐 Past Hour - Magnitude 4.5+</option>
+                <option value="past_day_m45">📅 Past Day - Magnitude 4.5+</option>
+                <option value="past_hour_m25">🕐 Past Hour - Magnitude 2.5+</option>
+                <option value="past_day_all">📅 Past Day - All Earthquakes</option>
+                <option value="past_week_m45">📊 Past Week - Magnitude 4.5+</option>
+                <option value="past_month_m45">🗓️ Past Month - Magnitude 4.5+</option>
+              </select>
+              <p className="text-xs text-gray-500 mt-1">
+                {feedType === 'past_hour_m45' && 'Often shows "no earthquakes" scenario for testing'}
+                {feedType === 'past_day_all' && 'Shows the most earthquake data for comprehensive analysis'}
+                {feedType === 'past_day_m45' && 'Balanced feed showing significant earthquakes'}
+              </p>
             </div>
 
             {selectedLocation && (
@@ -239,23 +260,6 @@ export default function LocationPage() {
             <div className="text-4xl mb-4">🛡️</div>
             <h3 className="text-lg font-semibold mb-2">Actionable Insights</h3>
             <p className="text-gray-600">Clear risk levels and specific recommendations based on current threat assessment.</p>
-          </div>
-        </div>
-
-        {/* API Information */}
-        <div className="mt-8 bg-gray-50 rounded-lg p-6 border border-gray-200">
-          <h3 className="text-lg font-bold text-gray-800 mb-3">🔌 Technical Implementation</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-            <div>
-              <div className="font-medium text-gray-700">Main Endpoint:</div>
-              <code className="bg-gray-200 px-2 py-1 rounded">POST /assess/tsunami-risk</code>
-              <div className="text-gray-600 mt-1">Comprehensive risk assessment with live USGS data</div>
-            </div>
-            <div>
-              <div className="font-medium text-gray-700">Data Source:</div>
-              <code className="bg-gray-200 px-2 py-1 rounded">GET /earthquakes/{feedType}</code>
-              <div className="text-gray-600 mt-1">Raw USGS earthquake data in GeoJSON format</div>
-            </div>
           </div>
         </div>
       </div>

@@ -129,11 +129,13 @@ const NewFundMePage = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-      <div className="bg-gray-800 bg-opacity-50 p-8 rounded-lg shadow-lg backdrop-blur-sm border border-gray-700">
-        {step === 1 && <Step1 nextStep={nextStep} formData={formData} setFormData={setFormData} />}
-        {step === 2 && <Step2 nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
-        {step === 3 && <Step3 prevStep={prevStep} formData={formData} setFormData={setFormData} submitForm={submitForm} />}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-sky-50">
+      <div className="max-w-2xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div className="bg-gray-800 bg-opacity-50 p-8 rounded-lg shadow-lg backdrop-blur-sm border border-gray-700">
+          {step === 1 && <Step1 nextStep={nextStep} formData={formData} setFormData={setFormData} />}
+          {step === 2 && <Step2 nextStep={nextStep} prevStep={prevStep} formData={formData} setFormData={setFormData} />}
+          {step === 3 && <Step3 prevStep={prevStep} formData={formData} setFormData={setFormData} submitForm={submitForm} />}
+        </div>
       </div>
     </div>
   );

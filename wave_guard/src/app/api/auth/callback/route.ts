@@ -9,7 +9,7 @@ export async function GET(request: Request) {
 
   if (!idToken) {
     return NextResponse.redirect(
-      `${requestUrl.origin}/login?error=No authentication token found`
+      `${requestUrl.origin}/auth?error=No authentication token found`
     );
   }
 
@@ -85,7 +85,7 @@ export async function GET(request: Request) {
   } catch (error) {
     console.error("Error in OAuth callback:", error);
     return NextResponse.redirect(
-      `${requestUrl.origin}/login?error=Authentication error`
+      `${requestUrl.origin}/auth?error=Authentication error`
     );
   }
 }
