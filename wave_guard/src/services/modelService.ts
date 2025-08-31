@@ -10,7 +10,7 @@ export interface TsunamiPredictionInput {
   latitude: number;
   longitude: number;
 }
-
+ 
 export interface TsunamiPredictionResponse {
   status: string;
   tsunami_prediction: {
