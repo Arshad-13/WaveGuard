@@ -12,7 +12,7 @@ import {
   CycloneAssessment
 } from '@/types/models';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_ML_API_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_ML_API_URL || 'https://waveguard-1.onrender.com';
 
 class ModelService {
   private async fetchAPI<T>(endpoint: string, options?: RequestInit): Promise<T> {

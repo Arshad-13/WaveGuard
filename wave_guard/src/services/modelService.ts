@@ -2,7 +2,7 @@
  * Model Service - Handles ML model predictions and API communication
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://waveguard-1.onrender.com';
 
 export interface TsunamiPredictionInput {
   magnitude: number;
