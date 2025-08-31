@@ -41,15 +41,15 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-console.log('Firebase config:', {
-  apiKey: firebaseConfig.apiKey,
-  authDomain: firebaseConfig.authDomain,
-  projectId: firebaseConfig.projectId,
-  storageBucket: firebaseConfig.storageBucket,
-  messagingSenderId: firebaseConfig.messagingSenderId,
-  appId: firebaseConfig.appId,
-  measurementId: firebaseConfig.measurementId
-});
+// console.log('Firebase config:', {
+//   apiKey: firebaseConfig.apiKey,
+//   authDomain: firebaseConfig.authDomain,
+//   projectId: firebaseConfig.projectId,
+//   storageBucket: firebaseConfig.storageBucket,
+//   messagingSenderId: firebaseConfig.messagingSenderId,
+//   appId: firebaseConfig.appId,
+//   measurementId: firebaseConfig.measurementId
+// });
 
 if (!firebaseConfig.apiKey) {
   throw new Error('Firebase API key is missing');

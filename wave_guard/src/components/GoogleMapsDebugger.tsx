@@ -6,7 +6,7 @@ interface DiagnosticResult {
   test: string;
   status: 'pass' | 'fail' | 'warning';
   message: string;
-  details?: any;
+  details?: Record<string, unknown>;
 }
 
 const GoogleMapsDebugger: React.FC = () => {
@@ -18,7 +18,7 @@ const GoogleMapsDebugger: React.FC = () => {
     const results: DiagnosticResult[] = [];
 
     // Test 1: Environment Variables
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
     results.push({
       test: 'API Key Environment Variable',
       status: apiKey ? 'pass' : 'fail',
@@ -62,7 +62,7 @@ const GoogleMapsDebugger: React.FC = () => {
         test: 'Network Connectivity',
         status: 'fail',
         message: 'Cannot reach Google Maps API',
-        details: { error: error.message }
+        details: { error: error instanceof Error ? error.message : 'Unknown error' }
       });
     }
 
@@ -120,7 +120,7 @@ const GoogleMapsDebugger: React.FC = () => {
         test: 'Google Maps Script Loading',
         status: 'fail',
         message: 'Failed to load Google Maps API',
-        details: { error: error.message }
+        details: { error: error instanceof Error ? error.message : 'Unknown error' }
       });
     }
 

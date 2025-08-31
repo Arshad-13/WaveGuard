@@ -6,9 +6,8 @@ import {
   EarthquakeDataRequest,
   EarthquakeDataResponse,
   TsunamiAnalysisResponse,
-  UserLocationInput,
+  LocationInput,
   UserRiskAssessment,
-  USGSEarthquakeResponse,
   CycloneRiskInput,
   CycloneAssessment
 } from '@/types/models';
@@ -81,25 +80,40 @@ class ModelService {
   }
 
   // New USGS integration methods
-  async assessTsunamiRisk(input: UserLocationInput): Promise<UserRiskAssessment> {
+  async assessTsunamiRisk(input: LocationInput): Promise<UserRiskAssessment> {
     return this.fetchAPI<UserRiskAssessment>('/assess/tsunami-risk', {
       method: 'POST',
       body: JSON.stringify(input),
     });
   }
 
-  async getUSGSEarthquakeData(feedType: string): Promise<USGSEarthquakeResponse> {
-    return this.fetchAPI<USGSEarthquakeResponse>(`/earthquakes/${feedType}`);
-  }
-
-  // Cyclone risk assessment method
+  // Cyclone risk assessment method (uses internal Next.js API)
   async assessCycloneRisk(input: CycloneRiskInput): Promise<CycloneAssessment> {
-    return this.fetchAPI<CycloneAssessment>('/assess/cyclone-risk', {
-      method: 'POST',
-      body: JSON.stringify(input),
-    });
+    try {
+      const response = await fetch('/api/assess/cyclone-risk', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(input),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Cyclone API Error: ${response.status} ${response.statusText}`);
+      }
+
+      return response.json();
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to assess cyclone risk: ${error.message}`);
+      }
+      throw new Error('Failed to assess cyclone risk');
+    }
   }
 
+  async getUSGSEarthquakeData(feedType: string): Promise<EarthquakeDataResponse> {
+    return this.fetchAPI<EarthquakeDataResponse>(`/earthquakes/${feedType}`);
+  }
   async checkConnection(): Promise<boolean> {
     try {
       await this.fetchAPI('/');

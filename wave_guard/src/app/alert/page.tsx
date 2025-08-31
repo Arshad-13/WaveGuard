@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { db } from "@/lib/authLib";
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -13,9 +14,15 @@ import {
   orderBy,
   getDocs,
 } from "firebase/firestore";
-import { useRouter } from "next/navigation";
-import twilio from 'twilio';
+interface User {
+  uid: string;
+  displayName?: string;
+}
 
+interface FirebaseUser {
+  uid: string;
+  displayName?: string;
+}
 
 export default function NoticeBoard() {
   const { user } = useAuth();
@@ -23,34 +30,51 @@ export default function NoticeBoard() {
   const [region, setRegion] = useState<string | null>(null);
   const [noticeInput, setNoticeInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [notices, setNotices] = useState<any[]>([]);
+interface Notice {
+  id: string;
+  text: string;
+  createdAt: { seconds: number; nanoseconds: number };
+  name: string;
+  region: string;
+  postedBy: string;
+  officerName: string;
+}
+
+  const [notices, setNotices] = useState<Notice[]>([]);
+
+  // Function to send SMS via API route
+const sendSMS = async (body: string, from: string, to: string) => {
+    try {
+      const response = await fetch('/api/send-sms', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ body, from, to }),
+      });
   
-
-  const router = useRouter();
-
-  useEffect(() => {
-    const accountSid = process.env.NEXT_PUBLIC_TWILIO_ACCOUNT_SID;
-    const authToken = process.env.NEXT_PUBLIC_TWILIO_AUTH_TOKEN;
-    const client = twilio(accountSid, authToken);
-
-    async function createMessage() {
-    const message = await client.messages.create({
-        body: "This is the ship that made the Kessel Run in fourteen parsecs?",
-        from: "+919328788481",
-        to: "+919714110365",
-    });
-
-        console.log(message.body);
-        }
-
-        createMessage();
-  }, [])
+      const result = await response.json();
+      
+      if (result.success) {
+        console.log('SMS sent successfully:', result.body);
+        return result;
+      } else {
+        console.error('Failed to send SMS:', result.error);
+        throw new Error(result.error);
+      }
+    } catch (error) {
+      console.error('Error sending SMS:', error);
+      throw error;
+    }
+  };
 
   // Fetch user details (role + region)
   useEffect(() => {
     const fetchUserDetails = async () => {
-      if (user?.uid) {
-        const userDocRef = doc(db, "users", user.uid);
+      // Uncomment the line below if you want to send a test SMS on component mount
+      // sendSMS("This is the ship that made the Kessel Run in fourteen parsecs?", "+919328788481", "+919714110365");
+      if (user && 'uid' in user && (user as FirebaseUser).uid) {
+        const userDocRef = doc(db, "users", (user as FirebaseUser).uid);
         const userSnap = await getDoc(userDocRef);
         if (userSnap.exists()) {
           const userData = userSnap.data();
@@ -88,7 +112,7 @@ useEffect(() => {
             id: docSnap.id,
             ...data,
             officerName: posterName,
-          };
+          } as Notice;
         })
       );
 
@@ -101,6 +125,12 @@ useEffect(() => {
 
   const handleBroadcast = async () => {
     if (!noticeInput.trim()) return;
+    
+    // Ensure region is loaded before proceeding
+    if (!region) {
+      alert("Please wait while loading your region information...");
+      return;
+    }
 
     try {
         // console.table(user)
@@ -108,14 +138,15 @@ useEffect(() => {
       await addDoc(collection(db, "notices"), {
         text: noticeInput,
         createdAt: new Date(),
-        name: user.displayName,
+        name: (user as unknown as FirebaseUser)?.displayName || "Unknown Officer",
         region,
-        postedBy: user.uid,
+        postedBy: (user as unknown as FirebaseUser)?.uid || "",
       });
       setNoticeInput("");
       alert("Notice broadcasted!");
     } catch (error) {
       console.error("Error posting notice:", error);
+      alert("Error posting notice. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -148,11 +179,20 @@ useEffect(() => {
             onChange={(e) => setNoticeInput(e.target.value)}
           />
           <button
-            className="bg-blue-600 text-white px-4 py-2 rounded"
+            className={`px-4 py-2 rounded ${
+              loading || !region 
+                ? "bg-gray-400 cursor-not-allowed" 
+                : "bg-blue-600 hover:bg-blue-700"
+            } text-white`}
             onClick={handleBroadcast}
-            disabled={loading}
+            disabled={loading || !region}
           >
-            {loading ? "Broadcasting..." : "Broadcast Notice"}
+            {loading 
+              ? "Broadcasting..." 
+              : !region 
+              ? "Loading region..." 
+              : "Broadcast Notice"
+            }
           </button>
         </div>
       )}

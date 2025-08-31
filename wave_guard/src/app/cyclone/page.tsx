@@ -225,7 +225,7 @@ export default function CyclonePage() {
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
             <div className="text-4xl mb-4">🔄</div>
             <h3 className="text-lg font-semibold mb-2">Real-Time Weather Data</h3>
-            <p className="text-gray-600">Live atmospheric pressure and wind speed updates from OpenWeatherMap's global network.</p>
+            <p className="text-gray-600">Live atmospheric pressure and wind speed updates from OpenWeatherMap&apos;s global network.</p>
           </div>
           
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">

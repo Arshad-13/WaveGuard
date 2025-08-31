@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Upload, MapPin, Calendar, AlertTriangle, CheckCircle, X } from 'lucide-react';
+import Image from 'next/image';
+import { Upload, MapPin, AlertTriangle, CheckCircle, X } from 'lucide-react';
 import { clsx } from 'clsx';
 
 interface FormData {
@@ -107,7 +108,7 @@ export function ReportForm() {
     }));
   };
 
-  const handleInputChange = (field: keyof FormData, value: any) => {
+  const handleInputChange = <K extends keyof FormData>(field: K, value: FormData[K]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
@@ -231,9 +232,9 @@ export function ReportForm() {
           </label>
           <div className="grid grid-cols-3 gap-4">
             {[
-              { value: 'low', label: 'Low Priority', color: 'green', bgColor: 'bg-green-50', borderColor: 'border-green-500', textColor: 'text-green-700' },
-              { value: 'medium', label: 'Medium Priority', color: 'yellow', bgColor: 'bg-yellow-50', borderColor: 'border-yellow-500', textColor: 'text-yellow-700' },
-              { value: 'high', label: 'High Priority', color: 'red', bgColor: 'bg-red-50', borderColor: 'border-red-500', textColor: 'text-red-700' }
+              { value: 'low' as const, label: 'Low Priority', color: 'green', bgColor: 'bg-green-50', borderColor: 'border-green-500', textColor: 'text-green-700' },
+              { value: 'medium' as const, label: 'Medium Priority', color: 'yellow', bgColor: 'bg-yellow-50', borderColor: 'border-yellow-500', textColor: 'text-yellow-700' },
+              { value: 'high' as const, label: 'High Priority', color: 'red', bgColor: 'bg-red-50', borderColor: 'border-red-500', textColor: 'text-red-700' }
             ].map((urgency) => (
               <button
                 key={urgency.value}
@@ -309,10 +310,12 @@ export function ReportForm() {
             <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
               {formData.images.map((file, index) => (
                 <div key={index} className="relative group">
-                  <img
+                  <Image
                     src={URL.createObjectURL(file)}
                     alt={`Evidence ${index + 1}`}
                     className="w-full h-24 object-cover rounded-lg border-2 border-gray-200 shadow-md"
+                    width={100}
+                    height={96}
                   />
                   <button
                     type="button"

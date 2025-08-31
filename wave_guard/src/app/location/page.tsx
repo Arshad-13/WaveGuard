@@ -253,11 +253,7 @@ export default function LocationPage() {
             </div>
             <div>
               <div className="font-medium text-gray-700">Data Source:</div>
-<<<<<<< HEAD
-              <code className="bg-gray-200 px-2 py-1 rounded">GET /earthquakes/past_hour_m45</code>
-=======
               <code className="bg-gray-200 px-2 py-1 rounded">GET /earthquakes/{feedType}</code>
->>>>>>> 47f91f7ecff7500b670830d8a9da9d7c1dfe689c
               <div className="text-gray-600 mt-1">Raw USGS earthquake data in GeoJSON format</div>
             </div>
           </div>

@@ -1,14 +1,9 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Waves, AlertCircle, Info, Zap } from 'lucide-react';
+import { Send, Bot, User, AlertCircle, Info, Zap } from 'lucide-react';
 import { clsx } from 'clsx';
-import {
-  saveMessageToFirestore,
-  getMessagesFromFirestore,
-} from "@/lib/chatbot-utils";
 import { chatWithGemini } from "@/lib/chatbot";
-import { marked } from "marked";
 
 interface Message {
   id: string;
@@ -43,21 +38,32 @@ const callMLModel = async (input: string): Promise<string> => {
   }
 };
 
-interface Message {
-  id: string;
-  type: 'user' | 'assistant';
+interface FirebaseMessage {
+  id?: string;
+  role: 'user' | 'assistant';
   content: string;
-  timestamp: Date;
-  suggestions?: string[];
+  timestamp: { toDate(): Date } | Date | string;
 }
 
 // Convert Firebase message format to ChatInterface format
-const convertFirebaseMessage = (msg: any): Message => {
+const convertFirebaseMessage = (msg: FirebaseMessage): Message => {
+  let timestamp: Date;
+  
+  if (typeof msg.timestamp === 'string') {
+    timestamp = new Date(msg.timestamp);
+  } else if (msg.timestamp instanceof Date) {
+    timestamp = msg.timestamp;
+  } else if (msg.timestamp && typeof msg.timestamp === 'object' && 'toDate' in msg.timestamp) {
+    timestamp = msg.timestamp.toDate();
+  } else {
+    timestamp = new Date();
+  }
+  
   return {
     id: msg.id || Date.now().toString(),
     type: msg.role === 'user' ? 'user' : 'assistant',
     content: msg.content,
-    timestamp: msg.timestamp?.toDate ? msg.timestamp.toDate() : new Date(msg.timestamp)
+    timestamp
   };
 };
 

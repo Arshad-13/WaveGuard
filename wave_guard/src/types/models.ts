@@ -187,10 +187,6 @@ export interface UserRiskAssessment {
     time: string;
   };
   recommendations: string[];
-<<<<<<< HEAD
-  lastUpdated: string;
-}
-=======
   feed_info: {
     feed_type: string;
     source: string;
@@ -203,8 +199,8 @@ export interface UserRiskAssessment {
 export interface USGSEarthquakeResponse {
   status: string;
   count: number;
-  earthquakes: EarthquakeData[];
-  metadata: any;
+  earthquakes: EarthquakeFeature[];
+  metadata: Record<string, unknown>;
   feed_type: string;
   message?: string;
 }
@@ -250,4 +246,3 @@ export interface CycloneAssessment {
   data_source: string;
   timestamp: string;
 }
->>>>>>> 47f91f7ecff7500b670830d8a9da9d7c1dfe689c
