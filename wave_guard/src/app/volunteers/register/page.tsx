@@ -7,7 +7,6 @@ import { Loader2, Home, Users, MapPin, Phone, User, Heart } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { db } from "@/lib/firebase";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
-import { toast } from "react-hot-toast";
 
 interface VolunteerData {
   id?: string;
@@ -118,7 +117,7 @@ function VolunteerRegisterContent() {
         email: user?.email || null,
         city: formData.city.trim(),
         contact: formData.contact.trim(),
-        motivation: formData.motivation.trim() || null,
+        motivation: formData.motivation.trim() || "",
         availability: formData.availability,
         skills: formData.skills,
         created_at: serverTimestamp(),
@@ -133,7 +132,7 @@ function VolunteerRegisterContent() {
       await setDoc(volunteerRef, volunteerData);
       
       setSuccess(true);
-      toast.success("Thank you! Your volunteer registration has been submitted successfully.");
+    //   toast.success("Thank you! Your volunteer registration has been submitted successfully.");
       
       // Redirect after success
       setTimeout(() => {
@@ -143,7 +142,7 @@ function VolunteerRegisterContent() {
     } catch (error: any) {
       console.error("Error registering volunteer:", error);
       setError(error.message || "An error occurred while registering. Please try again.");
-      toast.error("Registration failed. Please try again.");
+    //   toast.error("Registration failed. Please try again.");
     } finally {
       setLoading(false);
     }
