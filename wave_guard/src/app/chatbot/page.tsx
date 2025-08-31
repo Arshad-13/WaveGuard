@@ -16,7 +16,7 @@ export default function ChatBot() {
     const unsub = onAuthStateChanged(auth, (u) => {
       if (!u) {
         alert("Please Login first to talk with WaveGuard, our AI coastal safety assistant.")
-        router.push('/auth/login');
+        router.push('/auth');
       }
     });
 

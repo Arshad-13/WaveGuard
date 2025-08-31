@@ -196,12 +196,7 @@ export function AnimatedAuth() {
   const isReset = authMode === 'reset';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-cyan-900 flex items-center justify-center p-4">
-      {/* Home Button */}
-      <Link href="/" className="absolute top-4 left-4 flex items-center gap-2 bg-white/20 hover:bg-white/30 transition-colors text-white py-2 px-3 rounded-lg text-sm z-50">
-        <Home className="h-4 w-4" />
-        <span>Back to Home</span>
-      </Link>
+    <div className="min-h-screen w-full flex items-center justify-center">
 
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden">

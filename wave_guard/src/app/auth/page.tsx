@@ -1,10 +1,6 @@
 import { Suspense } from 'react';
 import { AnimatedAuth } from '@/components/Auth/AnimatedAuth';
 
-function AuthPageContent() {
-  return <AnimatedAuth />;
-}
-
 export default function AuthPage() {
   return (
     <Suspense fallback={
@@ -12,7 +8,7 @@ export default function AuthPage() {
         <div className="text-white text-lg font-semibold">Loading...</div>
       </div>
     }>
-      <AuthPageContent />
+      <AnimatedAuth />
     </Suspense>
   );
 }

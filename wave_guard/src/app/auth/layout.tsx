@@ -16,8 +16,8 @@ export default function AuthLayout({ children }: PropsWithChildren) {
     <Providers>
       <NextTopLoader color="#5750F1" showSpinner={false} />
       
-      <div className="min-h-screen bg-gray-2 dark:bg-[#020d1a]">
-        <main className="isolate mx-auto w-full max-w-screen-2xl overflow-hidden p-4 md:p-6 2xl:p-10">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-cyan-900" style={{ paddingTop: 0 }}>
+        <main className="w-full h-full" style={{ paddingTop: 0 }}>
           {children}
         </main>
       </div>
