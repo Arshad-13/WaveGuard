@@ -3,7 +3,7 @@ import { FileX, ChevronLeft } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="min-h-[100dvh] bg-gray-50 flex flex-col justify-center items-center p-4">
+    <div className="min-h-[100dvh] bg-gradient-to-br from-blue-50 via-cyan-50 to-sky-50 flex flex-col justify-center items-center p-4">
       <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8 text-center">
         <div className="flex justify-center mb-6">
           <div className="bg-red-50 p-4 rounded-full">

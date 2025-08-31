@@ -117,3 +117,21 @@ textarea:-ms-input-placeholder {
   opacity: 1 !important;
   font-weight: 500;
 }
+
+/* Fix Leaflet map z-index issues */
+.leaflet-container {
+  z-index: 1 !important;
+}
+
+.leaflet-pane {
+  z-index: 1 !important;
+}
+
+.leaflet-control {
+  z-index: 2 !important;
+}
+
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 2 !important;
+}

@@ -207,15 +207,15 @@ export default function NoticeBoard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-cyan-700">
       <div className="max-w-4xl mx-auto p-6">
         {/* Header Section */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl shadow-lg mb-4">
             <Bell className="h-8 w-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Emergency Alerts</h1>
-          <p className="text-gray-600">Stay informed with real-time coastal threat notifications</p>
+          <h1 className="text-3xl font-bold text-white mb-2">Emergency Alerts</h1>
+          <p className="text-blue-100">Stay informed with real-time coastal threat notifications</p>
           {region && (
             <div className="inline-flex items-center space-x-2 mt-3 px-4 py-2 bg-blue-100 rounded-full">
               <MapPin className="h-4 w-4 text-blue-600" />

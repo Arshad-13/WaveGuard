@@ -31,7 +31,7 @@ export function Navbar() {
 
   return (
     <nav className="fixed top-0 z-50 w-full bg-slate-900 shadow-lg">
-      <div className="flex items-center justify-between h-16 px-6">
+      <div className="flex items-center justify-between h-24 px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-3 group">
           <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-200">
