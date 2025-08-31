@@ -301,8 +301,8 @@ export function AnimatedAuth() {
                     </h2>
                     <p className="text-white/80 text-sm leading-relaxed">
                       {isSignUp 
-                        ? 'Already have an account? Sign in to access your coastal protection dashboard.'
-                        : 'New to WaveGuard? Create an account to start protecting your community.'
+                        ? 'New to WaveGuard? Create an account to start protecting your community.'
+                        : 'Already have an account? Sign in to access your coastal protection dashboard.'
                       }
                     </p>
                   </div>
@@ -312,7 +312,7 @@ export function AnimatedAuth() {
                     disabled={loading}
                     className="bg-white/20 hover:bg-white/30 border border-white/30 text-white font-semibold py-3 px-8 rounded-xl transition-all duration-300 hover:scale-105 backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isSignUp ? 'Sign In' : 'Sign Up'}
+                    {isSignUp ? 'Sign Up' : 'Sign In'}
                   </button>
 
                   {/* Features */}
