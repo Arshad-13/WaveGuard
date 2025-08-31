@@ -43,7 +43,7 @@ app.add_middleware(
 )
 
 # CORS middleware for Next.js frontend
-cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:3001").split(",")
+cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:3001,https://wave-guard-2025.vercel.app").split(",")
 
 app.add_middleware(
     CORSMiddleware,
